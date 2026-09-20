@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#050b20">
+
+  <title>Register | La Leçon de Football</title>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header class="nav">
+
+  <a href="index.html" class="brand">
+    LA LEÇON<br>
+    DE FOOTBALL
+  </a>
+
+  <a href="index.html" class="nav-btn">
+    ← HOME
+  </a>
+
+</header>
+
+
+<main>
+
+<section class="section register-page">
+
+  <div class="eyebrow">
+    PLAYER REGISTRATION
+  </div>
+
+  <h1>
+    ENTER THE<br>
+    <span>CLASSROOM.</span>
+  </h1>
+
+
+  <div class="selected-tournament">
+
+    <div class="eyebrow">
+      SELECTED TOURNAMENT
+    </div>
+
+    <h2 id="tournamentName">
+      Loading...
+    </h2>
+
+    <div id="tournamentDetails"></div>
+
+  </div>
+
+
+  <form id="registrationForm">
+
+    <label>
+      FULL NAME
+      <input
+        type="text"
+        id="name"
+        placeholder="Your full name"
+        required>
+    </label>
+
+
+    <label>
+      WHATSAPP NUMBER
+      <input
+        type="tel"
+        id="whatsapp"
+        placeholder="Your WhatsApp number"
+        required>
+    </label>
+
+
+    <label>
+      EFOOTBALL UID
+      <input
+        type="text"
+        id="uid"
+        placeholder="Your eFootball UID"
+        required>
+    </label>
+
+
+    <label>
+      IN-GAME NAME
+      <input
+        type="text"
+        id="ign"
+        placeholder="Your eFootball name"
+        required>
+    </label>
+
+
+    <label>
+      EMAIL
+      <span class="optional">
+        OPTIONAL
+      </span>
+
+      <input
+        type="email"
+        id="email"
+        placeholder="you@example.com">
+    </label>
+
+
+    <div class="payment-box">
+
+      <div class="eyebrow">
+        ENTRY PAYMENT
+      </div>
+
+      <h3 id="paymentAmount">
+        ₹35
+      </h3>
+
+      <p>
+        Pay using UPI:
+      </p>
+
+      <div class="upi">
+        <strong id="upiId">
+          yaseenbadarpk141@okaxis
+        </strong>
+
+        <button
+          type="button"
+          onclick="copyUPI()">
+          COPY
+        </button>
+      </div>
+
+      <p class="payment-note">
+        Complete the payment first.
+        Your registration will remain pending
+        until the admin verifies your payment.
+      </p>
+
+    </div>
+
+
+    <button
+      type="submit"
+      class="btn full">
+      CONTINUE →
+    </button>
+
+  </form>
+
+
+  <div id="confirmation" class="confirmation">
+
+  </div>
+
+</section>
+
+</main>
+
+
+<footer>
+
+  <strong>
+    LA LEÇON DE FOOTBALL
+  </strong>
+
+  <span>
+    Teach a masterclass... or get exposed.
+  </span>
+
+</footer>
+
+
+<script>
+
+const tournaments = {
+
+  super4: {
+    name: "SUPER 4",
+    players: "4 PLAYERS",
+    entry: "₹35",
+    prize: "₹101"
+  },
+
+  pro4: {
+    name: "PRO 4",
+    players: "4 PLAYERS",
+    entry: "₹55",
+    prize: "₹171"
+  },
+
+  grande: {
+    name: "LA GRANDE LEÇON",
+    players: "8 PLAYERS",
+    entry: "₹75",
+    prize: "1ST ₹301 • 2ND ₹121"
+  }
+
+};
+
+
+const params =
+  new URLSearchParams(window.location.search);
+
+const tournamentKey =
+  params.get("tournament") || "super4";
+
+
+const tournament =
+  tournaments[tournamentKey] ||
+  tournaments.super4;
+
+
+document.getElementById("tournamentName")
+  .textContent = tournament.name;
+
+
+document.getElementById("tournamentDetails")
+  .textContent =
+  tournament.players +
+  " • ENTRY " +
+  tournament.entry +
+  " • " +
+  tournament.prize;
+
+
+document.getElementById("paymentAmount")
+  .textContent = tournament.entry;
+
+
+function copyUPI() {
+
+  navigator.clipboard.writeText(
+    "yaseenbadarpk141@okaxis"
+  );
+
+  alert("UPI ID copied!");
+
+}
+
+
+document
+  .getElementById("registrationForm")
+  .addEventListener("submit", function(event) {
+
+    event.preventDefault();
+
+
+    const name =
+      document.getElementById("name").value;
+
+    const whatsapp =
+      document.getElementById("whatsapp").value;
+
+    const uid =
+      document.getElementById("uid").value;
+
+    const ign =
+      document.getElementById("ign").value;
+
+    const email =
+      document.getElementById("email").value;
+
+
+    const registrationID =
+      "LLF-" +
+      Date.now()
+        .toString()
+        .slice(-6);
+
+
+    const registration = {
+
+      id: registrationID,
+
+      name: name,
+
+      whatsapp: whatsapp,
+
+      uid: uid,
+
+      ign: ign,
+
+      email: email,
+
+      tournament: tournament.name,
+
+      entry: tournament.entry,
+
+      status: "PENDING"
+
+    };
+
+
+    localStorage.setItem(
+      registrationID,
+      JSON.stringify(registration)
+    );
+
+
+    document
+      .getElementById("registrationForm")
+      .style.display = "none";
+
+
+    document
+      .getElementById("confirmation")
+      .innerHTML = `
+
+        <div class="payment-box">
+
+          <div class="eyebrow">
+            REGISTRATION CREATED
+          </div>
+
+          <h2>
+            ${registrationID}
+          </h2>
+
+          <p>
+            Your registration has been created
+            successfully.
+          </p>
+
+          <p>
+            <strong>
+              Next step:
+            </strong>
+            Complete your ₹${tournament.entry}
+            payment and keep your transaction ID.
+          </p>
+
+          <p>
+            Your status is currently:
+          </p>
+
+          <h3>
+            🟡 PENDING
+          </h3>
+
+          <p class="payment-note">
+            The real payment screenshot and
+            admin approval system will be connected
+            in the next phase.
+          </p>
+
+        </div>
+
+      `;
+
+  });
+
+</script>
+
+</body>
+</html>
