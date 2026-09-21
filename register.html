@@ -507,7 +507,7 @@ function copyUPI() {
 
 document
 .getElementById("registrationForm")
-.addEventListener("submit", async function(event) {
+.addEventListener("submit", function(event) {
 
   event.preventDefault();
 
@@ -580,118 +580,115 @@ document
 
 
   /* -------------------------------------------------------
-     SEND REGISTRATION TO GOOGLE APPS SCRIPT
+     CREATE FORM DATA
      ------------------------------------------------------- */
 
-  try {
-
-    await fetch(API_URL, {
-
-      method: "POST",
-
-      mode: "no-cors",
-
-      headers: {
-
-        "Content-Type":
-          "application/x-www-form-urlencoded;charset=UTF-8"
-
-      },
-
-      body:
-        new URLSearchParams(fields).toString()
-
-    });
+  const formData =
+    new FormData();
 
 
-    /* -----------------------------------------------------
-       HIDE FORM
-       ----------------------------------------------------- */
+  Object.keys(fields).forEach(function(key) {
 
-    document
-      .getElementById("registrationForm")
-      .style.display =
-      "none";
+    formData.append(
+      key,
+      fields[key]
+    );
 
-
-    /* -----------------------------------------------------
-       SHOW CONFIRMATION
-       ----------------------------------------------------- */
-
-    document
-      .getElementById("confirmation")
-      .innerHTML = `
-
-        <div class="payment-box">
-
-          <div class="eyebrow">
-            REGISTRATION RECEIVED
-          </div>
-
-          <h2>
-            SUBMITTED
-          </h2>
-
-          <p>
-            Your registration has been
-            submitted successfully.
-          </p>
-
-          <p>
-
-            <strong>
-              Tournament:
-            </strong>
-
-            ${tournament.name}
-
-          </p>
-
-          <p>
-
-            <strong>
-              Status:
-            </strong>
-
-            🟡 PENDING
-
-          </p>
-
-          <p class="payment-note">
-
-            Your payment will be verified
-            by the admin.
-
-          </p>
-
-        </div>
-
-      `;
+  });
 
 
-  } catch (error) {
+  /* -------------------------------------------------------
+     SEND REGISTRATION
+     USING SEND BEACON
+     ------------------------------------------------------- */
+
+  const sent =
+    navigator.sendBeacon(
+      API_URL,
+      formData
+    );
 
 
-    /* -----------------------------------------------------
-       ERROR
-       ----------------------------------------------------- */
+  /* -------------------------------------------------------
+     CHECK IF BROWSER ACCEPTED REQUEST
+     ------------------------------------------------------- */
 
-    console.error(error);
-
+  if (!sent) {
 
     submitButton.disabled =
       false;
 
-
     submitButton.textContent =
       "SUBMIT REGISTRATION →";
 
-
     alert(
-      "Registration failed. Please try again."
+      "Registration could not be sent. Please try again."
     );
 
+    return;
+
   }
+
+
+  /* -------------------------------------------------------
+     SHOW CONFIRMATION
+     ------------------------------------------------------- */
+
+  document
+    .getElementById("registrationForm")
+    .style.display =
+    "none";
+
+
+  document
+    .getElementById("confirmation")
+    .innerHTML = `
+
+      <div class="payment-box">
+
+        <div class="eyebrow">
+          REGISTRATION RECEIVED
+        </div>
+
+        <h2>
+          SUBMITTED
+        </h2>
+
+        <p>
+          Your registration has been
+          submitted successfully.
+        </p>
+
+        <p>
+
+          <strong>
+            Tournament:
+          </strong>
+
+          ${tournament.name}
+
+        </p>
+
+        <p>
+
+          <strong>
+            Status:
+          </strong>
+
+          🟡 PENDING
+
+        </p>
+
+        <p class="payment-note">
+
+          Your payment will be verified
+          by the admin.
+
+        </p>
+
+      </div>
+
+    `;
 
 });
 
