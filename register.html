@@ -2,13 +2,24 @@
 <html lang="en">
 
 <head>
+
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#050b20">
 
-  <title>Register | La Leçon de Football</title>
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0">
 
-  <link rel="stylesheet" href="style.css">
+  <meta
+    name="theme-color"
+    content="#050b20">
+
+  <title>
+    Register | La Leçon de Football
+  </title>
+
+  <link
+    rel="stylesheet"
+    href="style.css">
 
   <style>
 
@@ -66,13 +77,22 @@
 
 <header class="nav">
 
-  <a href="index.html" class="brand">
+  <a
+    href="index.html"
+    class="brand">
+
     LA LEÇON<br>
     DE FOOTBALL
+
   </a>
 
-  <a href="index.html" class="nav-btn">
+
+  <a
+    href="index.html"
+    class="nav-btn">
+
     ← HOME
+
   </a>
 
 </header>
@@ -88,9 +108,11 @@
 
 <section class="section register-page">
 
+
   <div class="eyebrow">
     PLAYER REGISTRATION
   </div>
+
 
 
   <div class="selected-tournament">
@@ -98,7 +120,6 @@
 
     <!-- =====================================================
          TOURNAMENT IMAGE
-         Automatically changes based on selected tournament
          ===================================================== -->
 
     <img
@@ -130,8 +151,33 @@
        REGISTRATION FORM
        ===================================================== -->
 
-  <form id="registrationForm">
+  <form
+    id="registrationForm"
+    action="https://script.google.com/macros/s/AKfycbyo1piNvNpJI-O2yxAtB-w-TLFK-Yj1g0fUVsv9vkzJRkw84DJVhhQu71e3Q69WPKmV-Q/exec"
+    method="POST"
+    target="hiddenFrame">
 
+
+    <!-- =====================================================
+         HIDDEN TOURNAMENT DATA
+         ===================================================== -->
+
+    <input
+      type="hidden"
+      id="tournamentId"
+      name="tournamentId">
+
+
+    <input
+      type="hidden"
+      id="tournamentNameField"
+      name="tournamentName">
+
+
+
+    <!-- =====================================================
+         PLAYER NAME
+         ===================================================== -->
 
     <label>
 
@@ -140,12 +186,17 @@
       <input
         type="text"
         id="name"
+        name="playerName"
         placeholder="Your full name"
         required>
 
     </label>
 
 
+
+    <!-- =====================================================
+         WHATSAPP
+         ===================================================== -->
 
     <label>
 
@@ -154,12 +205,17 @@
       <input
         type="tel"
         id="whatsapp"
+        name="whatsapp"
         placeholder="Your WhatsApp number"
         required>
 
     </label>
 
 
+
+    <!-- =====================================================
+         EFOOTBALL UID
+         ===================================================== -->
 
     <label>
 
@@ -168,12 +224,17 @@
       <input
         type="text"
         id="uid"
+        name="uid"
         placeholder="Your eFootball UID"
         required>
 
     </label>
 
 
+
+    <!-- =====================================================
+         IN GAME NAME
+         ===================================================== -->
 
     <label>
 
@@ -182,11 +243,16 @@
       <input
         type="text"
         id="ign"
+        name="ign"
         placeholder="Your eFootball name">
 
     </label>
 
 
+
+    <!-- =====================================================
+         EMAIL
+         ===================================================== -->
 
     <label>
 
@@ -195,6 +261,7 @@
       <input
         type="email"
         id="email"
+        name="email"
         placeholder="you@example.com">
 
     </label>
@@ -256,6 +323,7 @@
         <input
           type="text"
           id="transactionId"
+          name="transactionId"
           placeholder="Enter payment transaction ID"
           required>
 
@@ -294,6 +362,17 @@
 
 
   <!-- =====================================================
+       HIDDEN IFRAME
+       ===================================================== -->
+
+  <iframe
+    name="hiddenFrame"
+    style="display:none;">
+  </iframe>
+
+
+
+  <!-- =====================================================
        CONFIRMATION
        ===================================================== -->
 
@@ -328,15 +407,6 @@
 
 
 <script>
-
-
-/* =========================================================
-   GOOGLE APPS SCRIPT
-   ========================================================= */
-
-const API_URL =
-"https://script.google.com/macros/s/AKfycbyo1piNvNpJI-O2yxAtB-w-TLFK-Yj1g0fUVsv9vkzJRkw84DJVhhQu71e3Q69WPKmV-Q/exec";
-
 
 
 /* =========================================================
@@ -394,7 +464,7 @@ const tournaments = {
 
   grande: {
 
-    id: "GRANDE",
+    id: "GRANDE8",
 
     name: "LA GRANDE LEÇON",
 
@@ -417,16 +487,36 @@ const tournaments = {
    ========================================================= */
 
 const params =
-new URLSearchParams(window.location.search);
+  new URLSearchParams(
+    window.location.search
+  );
 
 
 const tournamentKey =
-params.get("tournament") || "super4";
+  params.get("tournament") ||
+  "super4";
 
 
 const tournament =
-tournaments[tournamentKey] ||
-tournaments.super4;
+  tournaments[tournamentKey] ||
+  tournaments.super4;
+
+
+
+/* =========================================================
+   SET HIDDEN TOURNAMENT DATA
+   ========================================================= */
+
+document
+  .getElementById("tournamentId")
+  .value =
+  tournament.id;
+
+
+document
+  .getElementById("tournamentNameField")
+  .value =
+  tournament.name;
 
 
 
@@ -435,15 +525,15 @@ tournaments.super4;
    ========================================================= */
 
 document
-.getElementById("tournamentImage")
-.src =
-tournament.image;
+  .getElementById("tournamentImage")
+  .src =
+  tournament.image;
 
 
 document
-.getElementById("tournamentImage")
-.alt =
-tournament.name;
+  .getElementById("tournamentImage")
+  .alt =
+  tournament.name;
 
 
 
@@ -452,9 +542,9 @@ tournament.name;
    ========================================================= */
 
 document
-.getElementById("tournamentName")
-.textContent =
-tournament.name;
+  .getElementById("tournamentName")
+  .textContent =
+  tournament.name;
 
 
 
@@ -463,14 +553,14 @@ tournament.name;
    ========================================================= */
 
 document
-.getElementById("tournamentDetails")
-.textContent =
+  .getElementById("tournamentDetails")
+  .textContent =
 
-tournament.players +
-" • ENTRY " +
-tournament.entry +
-" • " +
-tournament.prize;
+  tournament.players +
+  " • ENTRY " +
+  tournament.entry +
+  " • " +
+  tournament.prize;
 
 
 
@@ -479,9 +569,9 @@ tournament.prize;
    ========================================================= */
 
 document
-.getElementById("paymentAmount")
-.textContent =
-tournament.entry;
+  .getElementById("paymentAmount")
+  .textContent =
+  tournament.entry;
 
 
 
@@ -506,195 +596,109 @@ function copyUPI() {
    ========================================================= */
 
 document
-.getElementById("registrationForm")
-.addEventListener("submit", function(event) {
-
-  event.preventDefault();
-
-
-  /* -------------------------------------------------------
-     SUBMIT BUTTON
-     ------------------------------------------------------- */
-
-  const submitButton =
-    document.getElementById("submitButton");
+  .getElementById("registrationForm")
+  .addEventListener(
+    "submit",
+    function() {
 
 
-  submitButton.disabled =
-    true;
+      /* -----------------------------------------------------
+         SUBMIT BUTTON
+      ----------------------------------------------------- */
+
+      const submitButton =
+        document.getElementById(
+          "submitButton"
+        );
 
 
-  submitButton.textContent =
-    "SUBMITTING...";
+      submitButton.disabled =
+        true;
 
 
-  /* -------------------------------------------------------
-     COLLECT PLAYER DATA
-     ------------------------------------------------------- */
-
-  const fields = {
-
-    tournamentId:
-      tournament.id,
-
-    tournamentName:
-      tournament.name,
-
-    playerName:
-      document
-      .getElementById("name")
-      .value
-      .trim(),
-
-    whatsapp:
-      document
-      .getElementById("whatsapp")
-      .value
-      .trim(),
-
-    uid:
-      document
-      .getElementById("uid")
-      .value
-      .trim(),
-
-    ign:
-      document
-      .getElementById("ign")
-      .value
-      .trim(),
-
-    email:
-      document
-      .getElementById("email")
-      .value
-      .trim(),
-
-    transactionId:
-      document
-      .getElementById("transactionId")
-      .value
-      .trim()
-
-  };
+      submitButton.textContent =
+        "SUBMITTING...";
 
 
-  /* -------------------------------------------------------
-     CREATE FORM DATA
-     ------------------------------------------------------- */
+      /* -----------------------------------------------------
+         SHOW CONFIRMATION
+         The browser continues the normal form POST
+         to Google Apps Script.
+      ----------------------------------------------------- */
 
-  const formData =
-    new FormData();
-
-
-  Object.keys(fields).forEach(function(key) {
-
-    formData.append(
-      key,
-      fields[key]
-    );
-
-  });
+      setTimeout(function() {
 
 
-  /* -------------------------------------------------------
-     SEND REGISTRATION
-     USING SEND BEACON
-     ------------------------------------------------------- */
-
-  const sent =
-    navigator.sendBeacon(
-      API_URL,
-      formData
-    );
+        document
+          .getElementById(
+            "registrationForm"
+          )
+          .style.display =
+          "none";
 
 
-  /* -------------------------------------------------------
-     CHECK IF BROWSER ACCEPTED REQUEST
-     ------------------------------------------------------- */
+        document
+          .getElementById(
+            "confirmation"
+          )
+          .innerHTML = `
 
-  if (!sent) {
+            <div class="payment-box">
 
-    submitButton.disabled =
-      false;
+              <div class="eyebrow">
+                REGISTRATION RECEIVED
+              </div>
 
-    submitButton.textContent =
-      "SUBMIT REGISTRATION →";
+              <h2>
+                SUBMITTED
+              </h2>
 
-    alert(
-      "Registration could not be sent. Please try again."
-    );
+              <p>
+                Your registration has been
+                submitted successfully.
+              </p>
 
-    return;
+              <p>
 
-  }
+                <strong>
+                  Tournament:
+                </strong>
+
+                ${tournament.name}
+
+              </p>
+
+              <p>
+
+                <strong>
+                  Status:
+                </strong>
+
+                🟡 PENDING
+
+              </p>
+
+              <p class="payment-note">
+
+                Your payment will be verified
+                by the admin.
+
+              </p>
+
+            </div>
+
+          `;
 
 
-  /* -------------------------------------------------------
-     SHOW CONFIRMATION
-     ------------------------------------------------------- */
+      }, 800);
 
-  document
-    .getElementById("registrationForm")
-    .style.display =
-    "none";
-
-
-  document
-    .getElementById("confirmation")
-    .innerHTML = `
-
-      <div class="payment-box">
-
-        <div class="eyebrow">
-          REGISTRATION RECEIVED
-        </div>
-
-        <h2>
-          SUBMITTED
-        </h2>
-
-        <p>
-          Your registration has been
-          submitted successfully.
-        </p>
-
-        <p>
-
-          <strong>
-            Tournament:
-          </strong>
-
-          ${tournament.name}
-
-        </p>
-
-        <p>
-
-          <strong>
-            Status:
-          </strong>
-
-          🟡 PENDING
-
-        </p>
-
-        <p class="payment-note">
-
-          Your payment will be verified
-          by the admin.
-
-        </p>
-
-      </div>
-
-    `;
-
-});
+    }
+  );
 
 
 </script>
 
 
 </body>
+
 </html>
