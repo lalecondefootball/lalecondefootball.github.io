@@ -9,9 +9,9 @@
   <link rel="stylesheet" href="style.css">
 
   <style>
-    /* =========================
-       HERO IMAGE
-       ========================= */
+    /* =========================================================
+       HERO — DESKTOP
+       ========================================================= */
 
     .hero {
       position: relative !important;
@@ -37,6 +37,7 @@
       position: absolute;
       inset: 0;
       z-index: 1;
+
       background:
         linear-gradient(
           90deg,
@@ -53,36 +54,108 @@
     }
 
 
-    /* =========================
-       MOBILE HERO
-       ========================= */
+    /* =========================================================
+       MOBILE — SPECIAL HERO COMPOSITION
+       ========================================================= */
 
     @media (max-width: 700px) {
 
       .hero {
-        min-height: 650px;
+        min-height: 720px;
+        display: flex;
+        align-items: flex-end;
+        position: relative !important;
+        overflow: hidden;
+        background: #050b20 !important;
       }
+
+
+      /*
+        Instead of object-fit: cover/contain,
+        the actual image keeps its proportions.
+
+        This prevents the three-player composition
+        from being aggressively cropped.
+      */
 
       .hero-image {
-        /*
-          Show the complete image on mobile
-          instead of cropping the sides.
-        */
-        object-fit: contain;
-        object-position: center center;
-        background: #050b20;
+        position: absolute;
+
+        top: 0;
+        left: 50%;
+
+        width: 100%;
+        height: auto;
+
+        min-height: 0;
+
+        transform: translateX(-50%);
+
+        object-fit: initial;
+        object-position: center;
+
+        z-index: 0;
       }
 
+
+      /*
+        Extra dark gradient.
+        The top remains visible enough to show
+        the football players while the bottom
+        becomes darker for the text.
+      */
+
       .hero-overlay {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+
         background:
           linear-gradient(
             180deg,
-            rgba(5, 9, 24, 0.45) 0%,
-            rgba(5, 9, 24, 0.72) 48%,
-            rgba(5, 9, 24, 0.96) 100%
+            rgba(5, 9, 24, 0.08) 0%,
+            rgba(5, 9, 24, 0.22) 25%,
+            rgba(5, 9, 24, 0.60) 55%,
+            rgba(5, 9, 24, 0.96) 82%,
+            rgba(5, 9, 24, 1) 100%
           );
       }
+
+
+      /*
+        Keep the text in the lower part,
+        away from the players.
+      */
+
+      .hero-content {
+        position: relative !important;
+        z-index: 2 !important;
+
+        width: 100%;
+        padding-top: 390px;
+        padding-bottom: 55px;
+      }
+
     }
+
+
+    /* =========================================================
+       VERY SMALL PHONES
+       ========================================================= */
+
+    @media (max-width: 390px) {
+
+      .hero {
+        min-height: 690px;
+      }
+
+      .hero-content {
+        padding-top: 350px;
+        padding-bottom: 45px;
+      }
+
+    }
+
   </style>
 </head>
 
@@ -90,9 +163,9 @@
 <body>
 
 
-<!-- =========================
+<!-- =========================================================
      NAVIGATION
-     ========================= -->
+     ========================================================= -->
 
 <header class="nav">
 
@@ -137,9 +210,9 @@
 <main>
 
 
-<!-- =========================
+<!-- =========================================================
      HERO
-     ========================= -->
+     ========================================================= -->
 
 <section class="hero">
 
@@ -163,13 +236,8 @@
 
 
     <h1>
-
       TEACH A<br>
-
-      <span>
-        MASTERCLASS.
-      </span>
-
+      <span>MASTERCLASS.</span>
     </h1>
 
 
@@ -206,9 +274,9 @@
 
 
 
-<!-- =========================
+<!-- =========================================================
      STATS
-     ========================= -->
+     ========================================================= -->
 
 <section class="stats">
 
@@ -269,9 +337,9 @@
 
 
 
-<!-- =========================
+<!-- =========================================================
      TOURNAMENTS
-     ========================= -->
+     ========================================================= -->
 
 <section
   id="tournaments"
@@ -441,11 +509,8 @@
 
 
       <h3>
-
         LA GRANDE<br>
-
         LEÇON
-
       </h3>
 
 
@@ -521,9 +586,9 @@
 
 
 
-<!-- =========================
+<!-- =========================================================
      HOW IT WORKS
-     ========================= -->
+     ========================================================= -->
 
 <section
   id="how"
@@ -562,7 +627,6 @@
     </div>
 
 
-
     <div>
 
       <b>
@@ -581,7 +645,6 @@
     </div>
 
 
-
     <div>
 
       <b>
@@ -598,7 +661,6 @@
       </p>
 
     </div>
-
 
 
     <div>
@@ -625,9 +687,9 @@
 
 
 
-<!-- =========================
+<!-- =========================================================
      RULES
-     ========================= -->
+     ========================================================= -->
 
 <section
   id="rules"
@@ -637,23 +699,17 @@
 
   <div>
 
-
     <div class="eyebrow">
       READ BEFORE ENTERING
     </div>
 
 
     <h2>
-
       THE CLASSROOM<br>
-
       RULES
-
     </h2>
 
-
   </div>
-
 
 
   <div class="rule-list">
@@ -713,9 +769,9 @@
 
 
 
-<!-- =========================
+<!-- =========================================================
      FOOTER
-     ========================= -->
+     ========================================================= -->
 
 <footer>
 
