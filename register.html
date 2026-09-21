@@ -126,6 +126,7 @@
       </p>
 
       <div class="upi">
+
         <strong id="upiId">
           yaseenbadarpk141@okaxis
         </strong>
@@ -135,10 +136,26 @@
           onclick="copyUPI()">
           COPY
         </button>
+
       </div>
 
+
+      <p>
+        After payment, enter your transaction ID below.
+      </p>
+
+
+      <label>
+        TRANSACTION ID
+        <input
+          type="text"
+          id="transactionId"
+          placeholder="Enter payment transaction ID"
+          required>
+      </label>
+
+
       <p class="payment-note">
-        Complete the payment first.
         Your registration will remain pending
         until the admin verifies your payment.
       </p>
@@ -148,16 +165,15 @@
 
     <button
       type="submit"
-      class="btn full">
-      CONTINUE →
+      class="btn full"
+      id="submitButton">
+      SUBMIT REGISTRATION →
     </button>
 
   </form>
 
 
-  <div id="confirmation" class="confirmation">
-
-  </div>
+  <div id="confirmation" class="confirmation"></div>
 
 </section>
 
@@ -179,9 +195,14 @@
 
 <script>
 
+const API_URL =
+  "https://script.google.com/macros/s/AKfycbzbB_cErykHeotyU7SOYRBCRJAak07kI7rzLuxS4tAMen_YDCwC3PUb5vqLiG9J-htJ/exec";
+
+
 const tournaments = {
 
   super4: {
+    id: "SUPER4",
     name: "SUPER 4",
     players: "4 PLAYERS",
     entry: "₹35",
@@ -189,6 +210,7 @@ const tournaments = {
   },
 
   pro4: {
+    id: "PRO4",
     name: "PRO 4",
     players: "4 PLAYERS",
     entry: "₹55",
@@ -196,6 +218,7 @@ const tournaments = {
   },
 
   grande: {
+    id: "GRANDE",
     name: "LA GRANDE LEÇON",
     players: "8 PLAYERS",
     entry: "₹75",
@@ -207,6 +230,7 @@ const tournaments = {
 
 const params =
   new URLSearchParams(window.location.search);
+
 
 const tournamentKey =
   params.get("tournament") || "super4";
@@ -247,112 +271,132 @@ function copyUPI() {
 
 document
   .getElementById("registrationForm")
-  .addEventListener("submit", function(event) {
+  .addEventListener("submit", async function(event) {
 
     event.preventDefault();
 
 
-    const name =
-      document.getElementById("name").value;
-
-    const whatsapp =
-      document.getElementById("whatsapp").value;
-
-    const uid =
-      document.getElementById("uid").value;
-
-    const ign =
-      document.getElementById("ign").value;
-
-    const email =
-      document.getElementById("email").value;
+    const submitButton =
+      document.getElementById("submitButton");
 
 
-    const registrationID =
-      "LLF-" +
-      Date.now()
-        .toString()
-        .slice(-6);
+    submitButton.disabled = true;
+    submitButton.textContent = "SUBMITTING...";
 
 
-    const registration = {
+    const data = {
 
-      id: registrationID,
+      tournamentId:
+        tournament.id,
 
-      name: name,
+      tournamentName:
+        tournament.name,
 
-      whatsapp: whatsapp,
+      playerName:
+        document.getElementById("name").value.trim(),
 
-      uid: uid,
+      whatsapp:
+        document.getElementById("whatsapp").value.trim(),
 
-      ign: ign,
-
-      email: email,
-
-      tournament: tournament.name,
-
-      entry: tournament.entry,
-
-      status: "PENDING"
+      transactionId:
+        document.getElementById("transactionId").value.trim()
 
     };
 
 
-    localStorage.setItem(
-      registrationID,
-      JSON.stringify(registration)
-    );
+    try {
+
+      const response =
+        await fetch(API_URL, {
+
+          method: "POST",
+
+          headers: {
+            "Content-Type": "text/plain;charset=utf-8"
+          },
+
+          body: JSON.stringify(data)
+
+        });
 
 
-    document
-      .getElementById("registrationForm")
-      .style.display = "none";
+      const result =
+        await response.json();
 
 
-    document
-      .getElementById("confirmation")
-      .innerHTML = `
+      if (!result.success) {
 
-        <div class="payment-box">
+        throw new Error(
+          result.error ||
+          "Registration failed."
+        );
 
-          <div class="eyebrow">
-            REGISTRATION CREATED
+      }
+
+
+      document
+        .getElementById("registrationForm")
+        .style.display = "none";
+
+
+      document
+        .getElementById("confirmation")
+        .innerHTML = `
+
+          <div class="payment-box">
+
+            <div class="eyebrow">
+              REGISTRATION RECEIVED
+            </div>
+
+            <h2>
+              ${result.registrationId}
+            </h2>
+
+            <p>
+              Your registration has been submitted successfully.
+            </p>
+
+            <p>
+              <strong>
+                Tournament:
+              </strong>
+              ${tournament.name}
+            </p>
+
+            <p>
+              <strong>
+                Status:
+              </strong>
+              🟡 PENDING
+            </p>
+
+            <p class="payment-note">
+              Your payment will be verified by the admin.
+              Keep your registration ID for future reference.
+            </p>
+
           </div>
 
-          <h2>
-            ${registrationID}
-          </h2>
+        `;
 
-          <p>
-            Your registration has been created
-            successfully.
-          </p>
 
-          <p>
-            <strong>
-              Next step:
-            </strong>
-            Complete your ₹${tournament.entry}
-            payment and keep your transaction ID.
-          </p>
+    } catch (error) {
 
-          <p>
-            Your status is currently:
-          </p>
+      console.error(error);
 
-          <h3>
-            🟡 PENDING
-          </h3>
 
-          <p class="payment-note">
-            The real payment screenshot and
-            admin approval system will be connected
-            in the next phase.
-          </p>
+      submitButton.disabled = false;
 
-        </div>
+      submitButton.textContent =
+        "SUBMIT REGISTRATION →";
 
-      `;
+
+      alert(
+        "Something went wrong. Please try again."
+      );
+
+    }
 
   });
 
