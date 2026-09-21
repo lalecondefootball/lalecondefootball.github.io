@@ -491,14 +491,11 @@ tournament.entry;
 
 function copyUPI() {
 
-
   navigator.clipboard.writeText(
     "yaseenbadarpk141@okaxis"
   );
 
-
   alert("UPI ID copied!");
-
 
 }
 
@@ -510,11 +507,9 @@ function copyUPI() {
 
 document
 .getElementById("registrationForm")
-.addEventListener("submit", function(event) {
-
+.addEventListener("submit", async function(event) {
 
   event.preventDefault();
-
 
 
   /* -------------------------------------------------------
@@ -522,313 +517,181 @@ document
      ------------------------------------------------------- */
 
   const submitButton =
-  document.getElementById("submitButton");
+    document.getElementById("submitButton");
 
 
   submitButton.disabled =
-  true;
+    true;
 
 
   submitButton.textContent =
-  "SUBMITTING...";
-
+    "SUBMITTING...";
 
 
   /* -------------------------------------------------------
      COLLECT PLAYER DATA
      ------------------------------------------------------- */
 
-  const playerName =
-
-  document
-  .getElementById("name")
-  .value
-  .trim();
-
-
-
-  const whatsapp =
-
-  document
-  .getElementById("whatsapp")
-  .value
-  .trim();
-
-
-
-  const uid =
-
-  document
-  .getElementById("uid")
-  .value
-  .trim();
-
-
-
-  const ign =
-
-  document
-  .getElementById("ign")
-  .value
-  .trim();
-
-
-
-  const email =
-
-  document
-  .getElementById("email")
-  .value
-  .trim();
-
-
-
-  const transactionId =
-
-  document
-  .getElementById("transactionId")
-  .value
-  .trim();
-
-
-
-  /* -------------------------------------------------------
-     CREATE HIDDEN FORM
-     ------------------------------------------------------- */
-
-  const form =
-  document.createElement("form");
-
-
-  form.method =
-  "POST";
-
-
-  form.action =
-  API_URL;
-
-
-  form.target =
-  "registrationFrame";
-
-
-  form.style.display =
-  "none";
-
-
-
-  /* -------------------------------------------------------
-     FORM DATA
-     ------------------------------------------------------- */
-
   const fields = {
-
 
     tournamentId:
       tournament.id,
 
-
     tournamentName:
       tournament.name,
 
-
     playerName:
-      playerName,
-
+      document
+      .getElementById("name")
+      .value
+      .trim(),
 
     whatsapp:
-      whatsapp,
-
-
-    transactionId:
-      transactionId,
-
+      document
+      .getElementById("whatsapp")
+      .value
+      .trim(),
 
     uid:
-      uid,
-
+      document
+      .getElementById("uid")
+      .value
+      .trim(),
 
     ign:
-      ign,
-
+      document
+      .getElementById("ign")
+      .value
+      .trim(),
 
     email:
-      email
+      document
+      .getElementById("email")
+      .value
+      .trim(),
+
+    transactionId:
+      document
+      .getElementById("transactionId")
+      .value
+      .trim()
 
   };
 
 
-
   /* -------------------------------------------------------
-     ADD HIDDEN INPUTS
+     SEND REGISTRATION TO GOOGLE APPS SCRIPT
      ------------------------------------------------------- */
 
-  Object.keys(fields).forEach(function(key) {
+  try {
+
+    await fetch(API_URL, {
+
+      method: "POST",
+
+      mode: "no-cors",
+
+      headers: {
+
+        "Content-Type":
+          "application/x-www-form-urlencoded;charset=UTF-8"
+
+      },
+
+      body:
+        new URLSearchParams(fields).toString()
+
+    });
 
 
-    const input =
-    document.createElement("input");
+    /* -----------------------------------------------------
+       HIDE FORM
+       ----------------------------------------------------- */
+
+    document
+      .getElementById("registrationForm")
+      .style.display =
+      "none";
 
 
-    input.type =
-    "hidden";
+    /* -----------------------------------------------------
+       SHOW CONFIRMATION
+       ----------------------------------------------------- */
+
+    document
+      .getElementById("confirmation")
+      .innerHTML = `
+
+        <div class="payment-box">
+
+          <div class="eyebrow">
+            REGISTRATION RECEIVED
+          </div>
+
+          <h2>
+            SUBMITTED
+          </h2>
+
+          <p>
+            Your registration has been
+            submitted successfully.
+          </p>
+
+          <p>
+
+            <strong>
+              Tournament:
+            </strong>
+
+            ${tournament.name}
+
+          </p>
+
+          <p>
+
+            <strong>
+              Status:
+            </strong>
+
+            🟡 PENDING
+
+          </p>
+
+          <p class="payment-note">
+
+            Your payment will be verified
+            by the admin.
+
+          </p>
+
+        </div>
+
+      `;
 
 
-    input.name =
-    key;
+  } catch (error) {
 
 
-    input.value =
-    fields[key];
+    /* -----------------------------------------------------
+       ERROR
+       ----------------------------------------------------- */
+
+    console.error(error);
 
 
-    form.appendChild(input);
+    submitButton.disabled =
+      false;
 
 
-  });
+    submitButton.textContent =
+      "SUBMIT REGISTRATION →";
 
 
-
-  /* -------------------------------------------------------
-     CREATE HIDDEN IFRAME
-     ------------------------------------------------------- */
-
-  let iframe =
-  document.getElementById(
-    "registrationFrame"
-  );
-
-
-
-  if (!iframe) {
-
-
-    iframe =
-    document.createElement("iframe");
-
-
-    iframe.id =
-    "registrationFrame";
-
-
-    iframe.name =
-    "registrationFrame";
-
-
-    iframe.style.display =
-    "none";
-
-
-    document.body.appendChild(
-      iframe
+    alert(
+      "Registration failed. Please try again."
     );
 
   }
-
-
-
-  /* -------------------------------------------------------
-     ADD FORM
-     ------------------------------------------------------- */
-
-  document.body.appendChild(
-    form
-  );
-
-
-
-  /* -------------------------------------------------------
-     SEND TO GOOGLE APPS SCRIPT
-     ------------------------------------------------------- */
-
-  form.submit();
-
-
-
-  /* -------------------------------------------------------
-     SHOW RESULT
-     ------------------------------------------------------- */
-
-  setTimeout(function() {
-
-
-    form.remove();
-
-
-
-    document
-    .getElementById(
-      "registrationForm"
-    )
-    .style.display =
-    "none";
-
-
-
-    document
-    .getElementById(
-      "confirmation"
-    )
-    .innerHTML = `
-
-
-      <div class="payment-box">
-
-
-        <div class="eyebrow">
-          REGISTRATION RECEIVED
-        </div>
-
-
-        <h2>
-          SUBMITTED
-        </h2>
-
-
-        <p>
-          Your registration has been
-          submitted successfully.
-        </p>
-
-
-        <p>
-
-          <strong>
-            Tournament:
-          </strong>
-
-          ${tournament.name}
-
-        </p>
-
-
-        <p>
-
-          <strong>
-            Status:
-          </strong>
-
-          🟡 PENDING
-
-        </p>
-
-
-        <p class="payment-note">
-
-          Your payment will be verified
-          by the admin.
-
-        </p>
-
-
-      </div>
-
-
-    `;
-
-
-  }, 2000);
-
 
 });
 
