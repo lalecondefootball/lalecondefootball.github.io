@@ -127,7 +127,7 @@
 
       <div class="upi">
 
-        <strong id="upiId">
+        <strong>
           yaseenbadarpk141@okaxis
         </strong>
 
@@ -147,11 +147,13 @@
 
       <label>
         TRANSACTION ID
+
         <input
           type="text"
           id="transactionId"
           placeholder="Enter payment transaction ID"
           required>
+
       </label>
 
 
@@ -167,7 +169,9 @@
       type="submit"
       class="btn full"
       id="submitButton">
+
       SUBMIT REGISTRATION →
+
     </button>
 
   </form>
@@ -195,68 +199,110 @@
 
 <script>
 
-const API_URL =
-  "https://script.google.com/macros/s/AKfycbzbB_cErykHeotyU7SOYRBCRJAak07kI7rzLuxS4tAMen_YDCwC3PUb5vqLiG9J-htJ/exec";
+/* =========================
+   GOOGLE APPS SCRIPT API
+========================= */
 
+const API_URL =
+"https://script.google.com/macros/s/AKfycbzbB_cErykHeotyU7SOYRBCRJAak07kI7rzLuxS4tAMen_YDCwC3PUb5vqLiG9J-htJ/exec";
+
+
+/* =========================
+   TOURNAMENTS
+========================= */
 
 const tournaments = {
 
   super4: {
+
     id: "SUPER4",
+
     name: "SUPER 4",
+
     players: "4 PLAYERS",
+
     entry: "₹35",
+
     prize: "₹101"
+
   },
+
 
   pro4: {
+
     id: "PRO4",
+
     name: "PRO 4",
+
     players: "4 PLAYERS",
+
     entry: "₹55",
+
     prize: "₹171"
+
   },
 
+
   grande: {
+
     id: "GRANDE",
+
     name: "LA GRANDE LEÇON",
+
     players: "8 PLAYERS",
+
     entry: "₹75",
+
     prize: "1ST ₹301 • 2ND ₹121"
+
   }
 
 };
 
 
-const params =
-  new URLSearchParams(window.location.search);
+/* =========================
+   SELECT TOURNAMENT
+========================= */
 
+const params =
+new URLSearchParams(window.location.search);
 
 const tournamentKey =
-  params.get("tournament") || "super4";
-
+params.get("tournament") || "super4";
 
 const tournament =
-  tournaments[tournamentKey] ||
-  tournaments.super4;
+tournaments[tournamentKey] ||
+tournaments.super4;
 
 
-document.getElementById("tournamentName")
-  .textContent = tournament.name;
+/* =========================
+   DISPLAY TOURNAMENT
+========================= */
+
+document
+.getElementById("tournamentName")
+.textContent = tournament.name;
 
 
-document.getElementById("tournamentDetails")
-  .textContent =
-  tournament.players +
-  " • ENTRY " +
-  tournament.entry +
-  " • " +
-  tournament.prize;
+document
+.getElementById("tournamentDetails")
+.textContent =
+tournament.players +
+" • ENTRY " +
+tournament.entry +
+" • " +
+tournament.prize;
 
 
-document.getElementById("paymentAmount")
-  .textContent = tournament.entry;
+document
+.getElementById("paymentAmount")
+.textContent =
+tournament.entry;
 
+
+/* =========================
+   COPY UPI
+========================= */
 
 function copyUPI() {
 
@@ -269,136 +315,188 @@ function copyUPI() {
 }
 
 
+/* =========================
+   FORM SUBMISSION
+========================= */
+
 document
-  .getElementById("registrationForm")
-  .addEventListener("submit", async function(event) {
+.getElementById("registrationForm")
+.addEventListener("submit", function(event) {
 
-    event.preventDefault();
-
-
-    const submitButton =
-      document.getElementById("submitButton");
+  event.preventDefault();
 
 
-    submitButton.disabled = true;
-    submitButton.textContent = "SUBMITTING...";
+  const submitButton =
+  document.getElementById("submitButton");
 
 
-    const data = {
+  submitButton.disabled = true;
 
-      tournamentId:
-        tournament.id,
-
-      tournamentName:
-        tournament.name,
-
-      playerName:
-        document.getElementById("name").value.trim(),
-
-      whatsapp:
-        document.getElementById("whatsapp").value.trim(),
-
-      transactionId:
-        document.getElementById("transactionId").value.trim()
-
-    };
+  submitButton.textContent =
+  "SUBMITTING...";
 
 
-    try {
+  /* -------------------------
+     COLLECT DATA
+  ------------------------- */
 
-      const response =
-        await fetch(API_URL, {
+  const data = {
 
-          method: "POST",
+    tournamentId:
+    tournament.id,
 
-          headers: {
-            "Content-Type": "text/plain;charset=utf-8"
-          },
+    tournamentName:
+    tournament.name,
 
-          body: JSON.stringify(data)
+    playerName:
+    document
+    .getElementById("name")
+    .value
+    .trim(),
 
-        });
+    whatsapp:
+    document
+    .getElementById("whatsapp")
+    .value
+    .trim(),
 
+    transactionId:
+    document
+    .getElementById("transactionId")
+    .value
+    .trim()
 
-      const result =
-        await response.json();
-
-
-      if (!result.success) {
-
-        throw new Error(
-          result.error ||
-          "Registration failed."
-        );
-
-      }
-
-
-      document
-        .getElementById("registrationForm")
-        .style.display = "none";
+  };
 
 
-      document
-        .getElementById("confirmation")
-        .innerHTML = `
-
-          <div class="payment-box">
-
-            <div class="eyebrow">
-              REGISTRATION RECEIVED
-            </div>
-
-            <h2>
-              ${result.registrationId}
-            </h2>
-
-            <p>
-              Your registration has been submitted successfully.
-            </p>
-
-            <p>
-              <strong>
-                Tournament:
-              </strong>
-              ${tournament.name}
-            </p>
-
-            <p>
-              <strong>
-                Status:
-              </strong>
-              🟡 PENDING
-            </p>
-
-            <p class="payment-note">
-              Your payment will be verified by the admin.
-              Keep your registration ID for future reference.
-            </p>
-
-          </div>
-
-        `;
+  /*
+    We use a hidden form instead of fetch().
+    This avoids the browser CORS problem
+    between GitHub Pages and Google Apps Script.
+  */
 
 
-    } catch (error) {
-
-      console.error(error);
-
-
-      submitButton.disabled = false;
-
-      submitButton.textContent =
-        "SUBMIT REGISTRATION →";
+  const form =
+  document.createElement("form");
 
 
-      alert(
-        "Something went wrong. Please try again."
-      );
+  form.method = "POST";
 
-    }
+  form.action = API_URL;
+
+  form.target = "hiddenFrame";
+
+  form.style.display = "none";
+
+
+  /* -------------------------
+     ADD DATA TO FORM
+  ------------------------- */
+
+  Object.keys(data).forEach(function(key) {
+
+    const input =
+    document.createElement("input");
+
+    input.type = "hidden";
+
+    input.name = key;
+
+    input.value = data[key];
+
+    form.appendChild(input);
 
   });
+
+
+  /* -------------------------
+     CREATE HIDDEN IFRAME
+  ------------------------- */
+
+  const iframe =
+  document.createElement("iframe");
+
+  iframe.name = "hiddenFrame";
+
+  iframe.style.display = "none";
+
+
+  document.body.appendChild(iframe);
+
+  document.body.appendChild(form);
+
+
+  /*
+    Submit to Google Apps Script.
+  */
+
+  form.submit();
+
+
+  /*
+    Google Apps Script receives the
+    registration even though we cannot
+    directly read its response.
+
+    Wait briefly, then show confirmation.
+  */
+
+  setTimeout(function() {
+
+    document
+    .getElementById("registrationForm")
+    .style.display = "none";
+
+
+    document
+    .getElementById("confirmation")
+    .innerHTML = `
+
+      <div class="payment-box">
+
+        <div class="eyebrow">
+          REGISTRATION RECEIVED
+        </div>
+
+        <h2>
+          SUBMITTED
+        </h2>
+
+        <p>
+          Your registration has been
+          submitted successfully.
+        </p>
+
+        <p>
+          <strong>
+            Tournament:
+          </strong>
+          ${tournament.name}
+        </p>
+
+        <p>
+          <strong>
+            Status:
+          </strong>
+          🟡 PENDING
+        </p>
+
+        <p class="payment-note">
+          Your payment will be verified
+          by the admin.
+        </p>
+
+      </div>
+
+    `;
+
+
+    submitButton.disabled = false;
+
+  }, 1800);
+
+});
+
 
 </script>
 
