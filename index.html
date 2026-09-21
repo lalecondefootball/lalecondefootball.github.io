@@ -4,11 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#050b20">
+
   <title>La Leçon de Football | eFootball Tournaments</title>
 
   <link rel="stylesheet" href="style.css">
 
   <style>
+
     /* =========================================================
        HERO — DESKTOP
        ========================================================= */
@@ -69,15 +71,6 @@
         background: #050b20 !important;
       }
 
-
-      /*
-        Instead of object-fit: cover/contain,
-        the actual image keeps its proportions.
-
-        This prevents the three-player composition
-        from being aggressively cropped.
-      */
-
       .hero-image {
         position: absolute;
 
@@ -97,14 +90,6 @@
         z-index: 0;
       }
 
-
-      /*
-        Extra dark gradient.
-        The top remains visible enough to show
-        the football players while the bottom
-        becomes darker for the text.
-      */
-
       .hero-overlay {
         position: absolute;
         inset: 0;
@@ -121,18 +106,15 @@
           );
       }
 
-
-      /*
-        Keep the text in the lower part,
-        away from the players.
-      */
-
       .hero-content {
         position: relative !important;
         z-index: 2 !important;
 
         width: 100%;
-        padding-top: 390px;
+
+        /* Reduced from 390px */
+        padding-top: 300px;
+
         padding-bottom: 55px;
       }
 
@@ -150,7 +132,9 @@
       }
 
       .hero-content {
-        padding-top: 350px;
+        /* Reduced from 350px */
+        padding-top: 280px;
+
         padding-bottom: 45px;
       }
 
