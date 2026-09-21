@@ -9,9 +9,60 @@
   <title>Register | La Leçon de Football</title>
 
   <link rel="stylesheet" href="style.css">
+
+  <style>
+
+    /* =====================================
+       REGISTRATION TOURNAMENT IMAGE
+       FULL IMAGE — NO CROPPING
+    ===================================== */
+
+    .registration-tournament-image {
+      display: block !important;
+      width: 100% !important;
+      height: auto !important;
+      max-width: 100% !important;
+      object-fit: contain !important;
+      object-position: center center !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+      margin: 0 0 24px 0;
+    }
+
+    .selected-tournament {
+      overflow: hidden;
+    }
+
+
+    /* =====================================
+       MOBILE
+    ===================================== */
+
+    @media (max-width: 700px) {
+
+      .registration-tournament-image {
+        display: block !important;
+        width: 100% !important;
+        height: auto !important;
+        max-width: 100% !important;
+        object-fit: contain !important;
+        object-position: center center !important;
+        margin-bottom: 20px;
+      }
+
+    }
+
+  </style>
+
 </head>
 
+
 <body>
+
+
+<!-- =========================================================
+     NAVIGATION
+     ========================================================= -->
 
 <header class="nav">
 
@@ -27,7 +78,13 @@
 </header>
 
 
+
 <main>
+
+
+<!-- =========================================================
+     REGISTRATION
+     ========================================================= -->
 
 <section class="section register-page">
 
@@ -35,30 +92,49 @@
     PLAYER REGISTRATION
   </div>
 
-  <h1>
-    ENTER THE<br>
-    <span>CLASSROOM.</span>
-  </h1>
-
 
   <div class="selected-tournament">
+
+
+    <!-- =====================================================
+         TOURNAMENT IMAGE
+         Automatically changes based on selected tournament
+         ===================================================== -->
+
+    <img
+      id="tournamentImage"
+      class="registration-tournament-image"
+      src="./super4.jpg"
+      alt="Selected tournament"
+    >
+
 
     <div class="eyebrow">
       SELECTED TOURNAMENT
     </div>
 
+
     <h2 id="tournamentName">
       Loading...
     </h2>
 
+
     <div id="tournamentDetails"></div>
+
 
   </div>
 
 
+
+  <!-- =====================================================
+       REGISTRATION FORM
+       ===================================================== -->
+
   <form id="registrationForm">
 
+
     <label>
+
       FULL NAME
 
       <input
@@ -66,10 +142,13 @@
         id="name"
         placeholder="Your full name"
         required>
+
     </label>
 
 
+
     <label>
+
       WHATSAPP NUMBER
 
       <input
@@ -77,10 +156,13 @@
         id="whatsapp"
         placeholder="Your WhatsApp number"
         required>
+
     </label>
 
 
+
     <label>
+
       EFOOTBALL UID
 
       <input
@@ -88,10 +170,13 @@
         id="uid"
         placeholder="Your eFootball UID"
         required>
+
     </label>
 
 
+
     <label>
+
       IN-GAME NAME
 
       <input
@@ -99,10 +184,13 @@
         id="ign"
         placeholder="Your eFootball name"
         required>
+
     </label>
 
 
+
     <label>
+
       EMAIL
 
       <span class="optional">
@@ -117,19 +205,28 @@
     </label>
 
 
+
+    <!-- =====================================================
+         PAYMENT
+         ===================================================== -->
+
     <div class="payment-box">
+
 
       <div class="eyebrow">
         ENTRY PAYMENT
       </div>
 
+
       <h3 id="paymentAmount">
         ₹35
       </h3>
 
+
       <p>
         Pay using UPI:
       </p>
+
 
 
       <div class="upi">
@@ -138,13 +235,17 @@
           yaseenbadarpk141@okaxis
         </strong>
 
+
         <button
           type="button"
           onclick="copyUPI()">
+
           COPY
+
         </button>
 
       </div>
+
 
 
       <p>
@@ -152,7 +253,9 @@
       </p>
 
 
+
       <label>
+
         TRANSACTION ID
 
         <input
@@ -164,13 +267,22 @@
       </label>
 
 
+
       <p class="payment-note">
+
         Your registration will remain pending
         until the admin verifies your payment.
+
       </p>
+
 
     </div>
 
+
+
+    <!-- =====================================================
+         SUBMIT
+         ===================================================== -->
 
     <button
       type="submit"
@@ -181,15 +293,30 @@
 
     </button>
 
+
   </form>
 
 
-  <div id="confirmation" class="confirmation"></div>
+
+  <!-- =====================================================
+       CONFIRMATION
+       ===================================================== -->
+
+  <div
+    id="confirmation"
+    class="confirmation">
+  </div>
+
 
 </section>
 
 </main>
 
+
+
+<!-- =========================================================
+     FOOTER
+     ========================================================= -->
 
 <footer>
 
@@ -204,76 +331,146 @@
 </footer>
 
 
+
 <script>
 
-/* =====================================
+
+/* =========================================================
    GOOGLE APPS SCRIPT
-===================================== */
+   ========================================================= */
 
 const API_URL =
 "https://script.google.com/macros/s/AKfycbzbB_cErykHeotyU7SOYRBCRJAak07kI7rzLuxS4tAMen_YDCwC3PUb5vqLiG9J-htJ/exec";
 
 
-/* =====================================
+
+/* =========================================================
    TOURNAMENT DATA
-===================================== */
+   ========================================================= */
 
 const tournaments = {
 
+
+  /* ---------------------------------------------------------
+     SUPER 4
+     --------------------------------------------------------- */
+
   super4: {
+
     id: "SUPER4",
+
     name: "SUPER 4",
+
     players: "4 PLAYERS",
+
     entry: "₹35",
-    prize: "₹101"
+
+    prize: "₹101",
+
+    image: "./super4.jpg"
+
   },
+
+
+  /* ---------------------------------------------------------
+     PRO 4
+     --------------------------------------------------------- */
 
   pro4: {
+
     id: "PRO4",
+
     name: "PRO 4",
+
     players: "4 PLAYERS",
+
     entry: "₹55",
-    prize: "₹171"
+
+    prize: "₹171",
+
+    image: "./pro4.jpg"
+
   },
 
+
+  /* ---------------------------------------------------------
+     LA GRANDE LEÇON
+     --------------------------------------------------------- */
+
   grande: {
+
     id: "GRANDE",
+
     name: "LA GRANDE LEÇON",
+
     players: "8 PLAYERS",
+
     entry: "₹75",
-    prize: "1ST ₹301 • 2ND ₹121"
+
+    prize: "1ST ₹301 • 2ND ₹121",
+
+    image: "./grande.JPG"
+
   }
 
 };
 
 
-/* =====================================
+
+/* =========================================================
    GET SELECTED TOURNAMENT
-===================================== */
+   ========================================================= */
 
 const params =
 new URLSearchParams(window.location.search);
 
+
 const tournamentKey =
 params.get("tournament") || "super4";
+
 
 const tournament =
 tournaments[tournamentKey] ||
 tournaments.super4;
 
 
-/* =====================================
-   DISPLAY TOURNAMENT
-===================================== */
+
+/* =========================================================
+   DISPLAY TOURNAMENT IMAGE
+   ========================================================= */
+
+document
+.getElementById("tournamentImage")
+.src =
+tournament.image;
+
+
+document
+.getElementById("tournamentImage")
+.alt =
+tournament.name;
+
+
+
+/* =========================================================
+   DISPLAY TOURNAMENT NAME
+   ========================================================= */
 
 document
 .getElementById("tournamentName")
-.textContent = tournament.name;
+.textContent =
+tournament.name;
 
+
+
+/* =========================================================
+   DISPLAY TOURNAMENT DETAILS
+   ========================================================= */
 
 document
 .getElementById("tournamentDetails")
 .textContent =
+
 tournament.players +
 " • ENTRY " +
 tournament.entry +
@@ -281,107 +478,145 @@ tournament.entry +
 tournament.prize;
 
 
+
+/* =========================================================
+   DISPLAY PAYMENT AMOUNT
+   ========================================================= */
+
 document
 .getElementById("paymentAmount")
 .textContent =
 tournament.entry;
 
 
-/* =====================================
+
+/* =========================================================
    COPY UPI
-===================================== */
+   ========================================================= */
 
 function copyUPI() {
+
 
   navigator.clipboard.writeText(
     "yaseenbadarpk141@okaxis"
   );
 
+
   alert("UPI ID copied!");
+
 
 }
 
 
-/* =====================================
+
+/* =========================================================
    SUBMIT REGISTRATION
-===================================== */
+   ========================================================= */
 
 document
 .getElementById("registrationForm")
 .addEventListener("submit", function(event) {
 
+
   event.preventDefault();
 
+
+
+  /* -------------------------------------------------------
+     SUBMIT BUTTON
+     ------------------------------------------------------- */
 
   const submitButton =
   document.getElementById("submitButton");
 
 
-  submitButton.disabled = true;
+  submitButton.disabled =
+  true;
+
 
   submitButton.textContent =
   "SUBMITTING...";
 
 
-  /* ===================================
+
+  /* -------------------------------------------------------
      COLLECT PLAYER DATA
-  =================================== */
+     ------------------------------------------------------- */
 
   const playerName =
+
   document
   .getElementById("name")
   .value
   .trim();
 
 
+
   const whatsapp =
+
   document
   .getElementById("whatsapp")
   .value
   .trim();
 
 
+
   const transactionId =
+
   document
   .getElementById("transactionId")
   .value
   .trim();
 
 
-  /* ===================================
+
+  /* -------------------------------------------------------
      CREATE HIDDEN FORM
-  =================================== */
+     ------------------------------------------------------- */
 
   const form =
   document.createElement("form");
 
 
-  form.method = "POST";
-
-  form.action = API_URL;
-
-  form.target = "registrationFrame";
-
-  form.style.display = "none";
+  form.method =
+  "POST";
 
 
-  /* ===================================
-     ADD FORM DATA
-  =================================== */
+  form.action =
+  API_URL;
+
+
+  form.target =
+  "registrationFrame";
+
+
+  form.style.display =
+  "none";
+
+
+
+  /* -------------------------------------------------------
+     FORM DATA
+     ------------------------------------------------------- */
 
   const fields = {
+
 
     tournamentId:
       tournament.id,
 
+
     tournamentName:
       tournament.name,
+
 
     playerName:
       playerName,
 
+
     whatsapp:
       whatsapp,
+
 
     transactionId:
       transactionId
@@ -389,121 +624,183 @@ document
   };
 
 
+
+  /* -------------------------------------------------------
+     ADD HIDDEN INPUTS
+     ------------------------------------------------------- */
+
   Object.keys(fields).forEach(function(key) {
+
 
     const input =
     document.createElement("input");
 
-    input.type = "hidden";
 
-    input.name = key;
+    input.type =
+    "hidden";
 
-    input.value = fields[key];
+
+    input.name =
+    key;
+
+
+    input.value =
+    fields[key];
+
 
     form.appendChild(input);
+
 
   });
 
 
-  /* ===================================
+
+  /* -------------------------------------------------------
      CREATE HIDDEN IFRAME
-  =================================== */
+     ------------------------------------------------------- */
 
   let iframe =
-  document.getElementById("registrationFrame");
+  document.getElementById(
+    "registrationFrame"
+  );
+
 
 
   if (!iframe) {
 
+
     iframe =
     document.createElement("iframe");
+
 
     iframe.id =
     "registrationFrame";
 
+
     iframe.name =
     "registrationFrame";
+
 
     iframe.style.display =
     "none";
 
-    document.body.appendChild(iframe);
+
+    document.body.appendChild(
+      iframe
+    );
 
   }
 
 
-  document.body.appendChild(form);
+
+  /* -------------------------------------------------------
+     ADD FORM
+     ------------------------------------------------------- */
+
+  document.body.appendChild(
+    form
+  );
 
 
-  /* ===================================
+
+  /* -------------------------------------------------------
      SEND TO GOOGLE APPS SCRIPT
-  =================================== */
+     ------------------------------------------------------- */
 
   form.submit();
 
 
-  /* ===================================
+
+  /* -------------------------------------------------------
      SHOW RESULT
-  =================================== */
+     ------------------------------------------------------- */
 
   setTimeout(function() {
+
 
     form.remove();
 
 
-    document
-    .getElementById("registrationForm")
-    .style.display = "none";
-
 
     document
-    .getElementById("confirmation")
+    .getElementById(
+      "registrationForm"
+    )
+    .style.display =
+    "none";
+
+
+
+    document
+    .getElementById(
+      "confirmation"
+    )
     .innerHTML = `
 
+
       <div class="payment-box">
+
 
         <div class="eyebrow">
           REGISTRATION RECEIVED
         </div>
 
+
         <h2>
           SUBMITTED
         </h2>
+
 
         <p>
           Your registration has been
           submitted successfully.
         </p>
 
+
         <p>
+
           <strong>
             Tournament:
           </strong>
+
           ${tournament.name}
+
         </p>
 
+
         <p>
+
           <strong>
             Status:
           </strong>
+
           🟡 PENDING
+
         </p>
+
 
         <p class="payment-note">
+
           Your payment will be verified
           by the admin.
+
         </p>
 
+
       </div>
+
 
     `;
 
 
   }, 2000);
 
+
 });
 
+
 </script>
+
 
 </body>
 </html>
