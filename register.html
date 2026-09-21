@@ -60,6 +60,7 @@
 
     <label>
       FULL NAME
+
       <input
         type="text"
         id="name"
@@ -70,6 +71,7 @@
 
     <label>
       WHATSAPP NUMBER
+
       <input
         type="tel"
         id="whatsapp"
@@ -80,6 +82,7 @@
 
     <label>
       EFOOTBALL UID
+
       <input
         type="text"
         id="uid"
@@ -90,6 +93,7 @@
 
     <label>
       IN-GAME NAME
+
       <input
         type="text"
         id="ign"
@@ -100,6 +104,7 @@
 
     <label>
       EMAIL
+
       <span class="optional">
         OPTIONAL
       </span>
@@ -108,6 +113,7 @@
         type="email"
         id="email"
         placeholder="you@example.com">
+
     </label>
 
 
@@ -124,6 +130,7 @@
       <p>
         Pay using UPI:
       </p>
+
 
       <div class="upi">
 
@@ -199,70 +206,50 @@
 
 <script>
 
-/* =========================
-   GOOGLE APPS SCRIPT API
-========================= */
+/* =====================================
+   GOOGLE APPS SCRIPT
+===================================== */
 
 const API_URL =
 "https://script.google.com/macros/s/AKfycbzbB_cErykHeotyU7SOYRBCRJAak07kI7rzLuxS4tAMen_YDCwC3PUb5vqLiG9J-htJ/exec";
 
 
-/* =========================
-   TOURNAMENTS
-========================= */
+/* =====================================
+   TOURNAMENT DATA
+===================================== */
 
 const tournaments = {
 
   super4: {
-
     id: "SUPER4",
-
     name: "SUPER 4",
-
     players: "4 PLAYERS",
-
     entry: "₹35",
-
     prize: "₹101"
-
   },
-
 
   pro4: {
-
     id: "PRO4",
-
     name: "PRO 4",
-
     players: "4 PLAYERS",
-
     entry: "₹55",
-
     prize: "₹171"
-
   },
 
-
   grande: {
-
     id: "GRANDE",
-
     name: "LA GRANDE LEÇON",
-
     players: "8 PLAYERS",
-
     entry: "₹75",
-
     prize: "1ST ₹301 • 2ND ₹121"
-
   }
 
 };
 
 
-/* =========================
-   SELECT TOURNAMENT
-========================= */
+/* =====================================
+   GET SELECTED TOURNAMENT
+===================================== */
 
 const params =
 new URLSearchParams(window.location.search);
@@ -275,9 +262,9 @@ tournaments[tournamentKey] ||
 tournaments.super4;
 
 
-/* =========================
+/* =====================================
    DISPLAY TOURNAMENT
-========================= */
+===================================== */
 
 document
 .getElementById("tournamentName")
@@ -300,9 +287,9 @@ document
 tournament.entry;
 
 
-/* =========================
+/* =====================================
    COPY UPI
-========================= */
+===================================== */
 
 function copyUPI() {
 
@@ -315,9 +302,9 @@ function copyUPI() {
 }
 
 
-/* =========================
-   FORM SUBMISSION
-========================= */
+/* =====================================
+   SUBMIT REGISTRATION
+===================================== */
 
 document
 .getElementById("registrationForm")
@@ -336,45 +323,34 @@ document
   "SUBMITTING...";
 
 
-  /* -------------------------
-     COLLECT DATA
-  ------------------------- */
+  /* ===================================
+     COLLECT PLAYER DATA
+  =================================== */
 
-  const data = {
-
-    tournamentId:
-    tournament.id,
-
-    tournamentName:
-    tournament.name,
-
-    playerName:
-    document
-    .getElementById("name")
-    .value
-    .trim(),
-
-    whatsapp:
-    document
-    .getElementById("whatsapp")
-    .value
-    .trim(),
-
-    transactionId:
-    document
-    .getElementById("transactionId")
-    .value
-    .trim()
-
-  };
+  const playerName =
+  document
+  .getElementById("name")
+  .value
+  .trim();
 
 
-  /*
-    We use a hidden form instead of fetch().
-    This avoids the browser CORS problem
-    between GitHub Pages and Google Apps Script.
-  */
+  const whatsapp =
+  document
+  .getElementById("whatsapp")
+  .value
+  .trim();
 
+
+  const transactionId =
+  document
+  .getElementById("transactionId")
+  .value
+  .trim();
+
+
+  /* ===================================
+     CREATE HIDDEN FORM
+  =================================== */
 
   const form =
   document.createElement("form");
@@ -384,16 +360,36 @@ document
 
   form.action = API_URL;
 
-  form.target = "hiddenFrame";
+  form.target = "registrationFrame";
 
   form.style.display = "none";
 
 
-  /* -------------------------
-     ADD DATA TO FORM
-  ------------------------- */
+  /* ===================================
+     ADD FORM DATA
+  =================================== */
 
-  Object.keys(data).forEach(function(key) {
+  const fields = {
+
+    tournamentId:
+      tournament.id,
+
+    tournamentName:
+      tournament.name,
+
+    playerName:
+      playerName,
+
+    whatsapp:
+      whatsapp,
+
+    transactionId:
+      transactionId
+
+  };
+
+
+  Object.keys(fields).forEach(function(key) {
 
     const input =
     document.createElement("input");
@@ -402,46 +398,58 @@ document
 
     input.name = key;
 
-    input.value = data[key];
+    input.value = fields[key];
 
     form.appendChild(input);
 
   });
 
 
-  /* -------------------------
+  /* ===================================
      CREATE HIDDEN IFRAME
-  ------------------------- */
+  =================================== */
 
-  const iframe =
-  document.createElement("iframe");
-
-  iframe.name = "hiddenFrame";
-
-  iframe.style.display = "none";
+  let iframe =
+  document.getElementById("registrationFrame");
 
 
-  document.body.appendChild(iframe);
+  if (!iframe) {
+
+    iframe =
+    document.createElement("iframe");
+
+    iframe.id =
+    "registrationFrame";
+
+    iframe.name =
+    "registrationFrame";
+
+    iframe.style.display =
+    "none";
+
+    document.body.appendChild(iframe);
+
+  }
+
 
   document.body.appendChild(form);
 
 
-  /*
-    Submit to Google Apps Script.
-  */
+  /* ===================================
+     SEND TO GOOGLE APPS SCRIPT
+  =================================== */
 
   form.submit();
 
 
-  /*
-    Google Apps Script receives the
-    registration even though we cannot
-    directly read its response.
-
-    Wait briefly, then show confirmation.
-  */
+  /* ===================================
+     SHOW RESULT
+  =================================== */
 
   setTimeout(function() {
+
+    form.remove();
+
 
     document
     .getElementById("registrationForm")
@@ -491,12 +499,9 @@ document
     `;
 
 
-    submitButton.disabled = false;
-
-  }, 1800);
+  }, 2000);
 
 });
-
 
 </script>
 
