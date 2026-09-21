@@ -57,6 +57,21 @@
 
 
     /* =========================================================
+       TOURNAMENT CARD IMAGES — FULL IMAGE / NO CROPPING
+       ========================================================= */
+
+    .tournament-image {
+      display: block;
+      width: 100%;
+      height: auto;
+      max-width: 100%;
+      object-fit: contain;
+      object-position: center center;
+      margin: 0 0 20px 0;
+    }
+
+
+    /* =========================================================
        YAMAL • ENDRICK • HAALAND
        FULL IMAGE — NO CROPPING
        ========================================================= */
@@ -159,6 +174,20 @@
 
 
       /* ---------------------------------------------------------
+         TOURNAMENT CARD IMAGES — MOBILE
+         --------------------------------------------------------- */
+
+      .tournament-image {
+        width: 100%;
+        height: auto;
+        max-width: 100%;
+        object-fit: contain;
+        object-position: center center;
+        margin-bottom: 20px;
+      }
+
+
+      /* ---------------------------------------------------------
          FUTURE STARS — MOBILE
          Full image remains visible.
          No crop.
@@ -196,6 +225,11 @@
       }
 
       .future-stars-image {
+        width: 100%;
+        height: auto;
+      }
+
+      .tournament-image {
         width: 100%;
         height: auto;
       }
@@ -398,6 +432,14 @@
         01 • 4 PLAYERS
       </div>
 
+      <!-- SUPER 4 IMAGE -->
+
+      <img
+        class="tournament-image"
+        src="./super4.jpg"
+        alt="SUPER 4"
+      >
+
       <h3>
         SUPER 4
       </h3>
@@ -458,6 +500,14 @@
         02 • 4 PLAYERS
       </div>
 
+      <!-- PRO 4 IMAGE -->
+
+      <img
+        class="tournament-image"
+        src="./pro4.jpg"
+        alt="PRO 4"
+      >
+
       <h3>
         PRO 4
       </h3>
@@ -517,6 +567,14 @@
       <div class="card-number">
         03 • 8 PLAYERS
       </div>
+
+      <!-- LA GRANDE LEÇON IMAGE -->
+
+      <img
+        class="tournament-image"
+        src="./grande.JPG"
+        alt="LA GRANDE LEÇON"
+      >
 
       <h3>
         LA GRANDE<br>
