@@ -57,6 +57,48 @@
 
 
     /* =========================================================
+       YAMAL • ENDRICK • HAALAND
+       FULL IMAGE — NO CROPPING
+       ========================================================= */
+
+    .future-stars-section {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+      background: #050b20;
+      line-height: 0;
+    }
+
+    .future-stars-image {
+      position: relative;
+      display: block;
+
+      width: 100%;
+      height: auto;
+
+      max-width: 100%;
+
+      object-fit: contain;
+      object-position: center center;
+    }
+
+    .future-stars-overlay {
+      position: absolute;
+      inset: 0;
+
+      background:
+        linear-gradient(
+          180deg,
+          rgba(5, 9, 24, 0.05) 0%,
+          rgba(5, 9, 24, 0.08) 50%,
+          rgba(5, 9, 24, 0.45) 100%
+        );
+
+      pointer-events: none;
+    }
+
+
+    /* =========================================================
        MOBILE — SPECIAL HERO COMPOSITION
        ========================================================= */
 
@@ -111,11 +153,28 @@
         z-index: 2 !important;
 
         width: 100%;
-
-        /* Reduced from 390px */
         padding-top: 300px;
-
         padding-bottom: 55px;
+      }
+
+
+      /* ---------------------------------------------------------
+         FUTURE STARS — MOBILE
+         Full image remains visible.
+         No crop.
+         --------------------------------------------------------- */
+
+      .future-stars-section {
+        width: 100%;
+        overflow: hidden;
+      }
+
+      .future-stars-image {
+        width: 100%;
+        height: auto;
+
+        object-fit: contain;
+        object-position: center center;
       }
 
     }
@@ -132,10 +191,13 @@
       }
 
       .hero-content {
-        /* Reduced from 350px */
         padding-top: 280px;
-
         padding-bottom: 45px;
+      }
+
+      .future-stars-image {
+        width: 100%;
+        height: auto;
       }
 
     }
@@ -200,38 +262,30 @@
 
 <section class="hero">
 
-
   <img
     class="hero-image"
     src="./hero-bg.PNG"
     alt=""
   >
 
-
   <div class="hero-overlay"></div>
 
-
   <div class="hero-content">
-
 
     <div class="eyebrow">
       eFOOTBALL • COMPETE • PROVE IT
     </div>
-
 
     <h1>
       TEACH A<br>
       <span>MASTERCLASS.</span>
     </h1>
 
-
     <p>
       Or get exposed.
     </p>
 
-
     <div class="hero-buttons">
-
 
       <a
         href="#tournaments"
@@ -240,7 +294,6 @@
         ENTER A TOURNAMENT →
       </a>
 
-
       <a
         href="#how"
         class="btn secondary"
@@ -248,9 +301,7 @@
         HOW IT WORKS
       </a>
 
-
     </div>
-
 
   </div>
 
@@ -263,7 +314,6 @@
      ========================================================= -->
 
 <section class="stats">
-
 
   <div>
 
@@ -316,7 +366,6 @@
 
   </div>
 
-
 </section>
 
 
@@ -330,16 +379,13 @@
   class="section"
 >
 
-
   <div class="eyebrow">
     CHOOSE YOUR BATTLE
   </div>
 
-
   <h2>
     TOURNAMENTS
   </h2>
-
 
   <div class="cards">
 
@@ -348,24 +394,19 @@
 
     <article class="card">
 
-
       <div class="card-number">
         01 • 4 PLAYERS
       </div>
-
 
       <h3>
         SUPER 4
       </h3>
 
-
       <p>
         Fast. Simple. No excuses.
       </p>
 
-
       <div class="money">
-
 
         <div>
 
@@ -392,14 +433,11 @@
 
         </div>
 
-
       </div>
-
 
       <div class="slots">
         4 SLOTS • OPEN
       </div>
-
 
       <a
         href="register.html?tournament=super4"
@@ -407,7 +445,6 @@
       >
         REGISTER →
       </a>
-
 
     </article>
 
@@ -417,24 +454,19 @@
 
     <article class="card">
 
-
       <div class="card-number">
         02 • 4 PLAYERS
       </div>
-
 
       <h3>
         PRO 4
       </h3>
 
-
       <p>
         For players who want more pressure.
       </p>
 
-
       <div class="money">
-
 
         <div>
 
@@ -461,14 +493,11 @@
 
         </div>
 
-
       </div>
-
 
       <div class="slots">
         4 SLOTS • OPEN
       </div>
-
 
       <a
         href="register.html?tournament=pro4"
@@ -476,7 +505,6 @@
       >
         REGISTER →
       </a>
-
 
     </article>
 
@@ -486,25 +514,20 @@
 
     <article class="card featured">
 
-
       <div class="card-number">
         03 • 8 PLAYERS
       </div>
-
 
       <h3>
         LA GRANDE<br>
         LEÇON
       </h3>
 
-
       <p>
         The main classroom. Two podium places.
       </p>
 
-
       <div class="money">
-
 
         <div>
 
@@ -544,14 +567,11 @@
 
         </div>
 
-
       </div>
-
 
       <div class="slots">
         8 SLOTS • OPEN
       </div>
-
 
       <a
         href="register.html?tournament=grande"
@@ -560,11 +580,29 @@
         REGISTER →
       </a>
 
-
     </article>
 
 
   </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     YAMAL • ENDRICK • HAALAND
+     FULL COMPOSITION
+     ========================================================= -->
+
+<section class="future-stars-section">
+
+  <img
+    class="future-stars-image"
+    src="./future-stars.PNG"
+    alt="Yamal, Endrick and Haaland"
+  >
+
+  <div class="future-stars-overlay"></div>
 
 </section>
 
@@ -579,16 +617,13 @@
   class="section dark"
 >
 
-
   <div class="eyebrow">
     NO CONFUSION
   </div>
 
-
   <h2>
     HOW IT WORKS
   </h2>
-
 
   <div class="steps">
 
@@ -680,13 +715,11 @@
   class="section rules"
 >
 
-
   <div>
 
     <div class="eyebrow">
       READ BEFORE ENTERING
     </div>
-
 
     <h2>
       THE CLASSROOM<br>
@@ -745,7 +778,6 @@
 
   </div>
 
-
 </section>
 
 
@@ -759,21 +791,17 @@
 
 <footer>
 
-
   <strong>
     LA LEÇON DE FOOTBALL
   </strong>
-
 
   <span>
     Teach a masterclass... or get exposed.
   </span>
 
-
   <span>
     © 2026
   </span>
-
 
 </footer>
 
