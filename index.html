@@ -608,8 +608,8 @@
       </div>
 
       <a
-        href="register.html?tournament=super4"
-        class="btn full"
+        href="#"
+        class="btn full tournament-closed"
         id="super4Button"
       >
         CHECKING...
@@ -661,6 +661,31 @@
 
           <small>
             PRIZE
+          </strong>
+
+        </div>
+
+      </div>
+
+      <div class="money">
+
+        <div>
+
+          <small>
+            ENTRY
+          </small>
+
+          <strong>
+            ₹55
+          </strong>
+
+        </div>
+
+
+        <div>
+
+          <small>
+            PRIZE
           </small>
 
           <strong>
@@ -671,16 +696,19 @@
 
       </div>
 
-      <div class="slots">
-        REGISTRATION CLOSED
+      <div
+        class="slots"
+        id="pro4Slots"
+      >
+        CHECKING REGISTRATION...
       </div>
 
       <a
         href="#"
         class="btn full tournament-closed"
-        onclick="return false;"
+        id="pro4Button"
       >
-        COMING SOON
+        CHECKING...
       </a>
 
     </article>
@@ -753,16 +781,19 @@
 
       </div>
 
-      <div class="slots">
-        REGISTRATION CLOSED
+      <div
+        class="slots"
+        id="grande8Slots"
+      >
+        CHECKING REGISTRATION...
       </div>
 
       <a
         href="#"
         class="btn full tournament-closed"
-        onclick="return false;"
+        id="grande8Button"
       >
-        COMING SOON
+        CHECKING...
       </a>
 
     </article>
@@ -1292,7 +1323,7 @@
 
 
 <!-- =========================================================
-     FAQ + SUPER 4 STATUS
+     FAQ + TOURNAMENT STATUS
      ========================================================= -->
 
 <script>
@@ -1321,24 +1352,179 @@
 
 
   /* ---------------------------------------------------------
-     SUPER 4 STATUS
+     TOURNAMENT STATUS API
      --------------------------------------------------------- */
 
   const statusAPI =
-    "https://script.google.com/macros/s/AKfycbyrgiZ35OuE2ijdaUqVTfosK0Iw8g4PI1Mbk2SaZIlKAN7FWLfpxUKiD0gg8VlixFXk/exec";
+    "https://script.google.com/macros/s/AKfycbytNY3qatBKptDBM-5uK8kIUT71G1BVKVX7M9kRTSbcBDiveIE088DKJ6ahDtYUMXUQ/exec";
 
 
-  const super4Button =
-    document.getElementById("super4Button");
+  /* ---------------------------------------------------------
+     TOURNAMENT ELEMENTS
+     --------------------------------------------------------- */
+
+  const tournaments = {
+
+    SUPER4: {
+      slots: document.getElementById("super4Slots"),
+      button: document.getElementById("super4Button"),
+      name: "SUPER 4",
+      registrationURL: "register.html?tournament=super4"
+    },
+
+    PRO4: {
+      slots: document.getElementById("pro4Slots"),
+      button: document.getElementById("pro4Button"),
+      name: "PRO 4",
+      registrationURL: "register.html?tournament=pro4"
+    },
+
+    GRANDE8: {
+      slots: document.getElementById("grande8Slots"),
+      button: document.getElementById("grande8Button"),
+      name: "LA GRANDE LEÇON",
+      registrationURL: "register.html?tournament=grande"
+    }
+
+  };
 
 
-  const super4Slots =
-    document.getElementById("super4Slots");
+  /* ---------------------------------------------------------
+     UPDATE ONE TOURNAMENT
+     --------------------------------------------------------- */
 
+  function updateTournament(tournamentId, data) {
+
+    const tournament =
+      tournaments[tournamentId];
+
+
+    if (!tournament) {
+      return;
+    }
+
+
+    const status =
+      String(data.status || "")
+        .trim()
+        .toUpperCase();
+
+
+    const registeredCount =
+      Number(data.registeredCount || 0);
+
+
+    const slotLimit =
+      Number(data.slots || 0);
+
+
+    /* -------------------------------------------------------
+       OPEN
+       ------------------------------------------------------- */
+
+    if (
+      status === "OPEN" &&
+      registeredCount < slotLimit
+    ) {
+
+      tournament.slots.textContent =
+        registeredCount +
+        " / " +
+        slotLimit +
+        " SLOTS • OPEN";
+
+
+      tournament.button.textContent =
+        "REGISTER →";
+
+
+      tournament.button.href =
+        tournament.registrationURL;
+
+
+      tournament.button.classList.remove(
+        "tournament-closed"
+      );
+
+
+      return;
+
+    }
+
+
+    /* -------------------------------------------------------
+       FULL
+       ------------------------------------------------------- */
+
+    if (
+      status === "FULL" ||
+      (
+        slotLimit > 0 &&
+        registeredCount >= slotLimit
+      )
+    ) {
+
+      tournament.slots.textContent =
+        slotLimit +
+        " / " +
+        slotLimit +
+        " SLOTS • FULL";
+
+
+      tournament.button.textContent =
+        "REGISTRATION FULL";
+
+
+      tournament.button.removeAttribute(
+        "href"
+      );
+
+
+      tournament.button.classList.add(
+        "tournament-closed"
+      );
+
+
+      return;
+
+    }
+
+
+    /* -------------------------------------------------------
+       DRAFT / CLOSED / ANY OTHER STATUS
+       ------------------------------------------------------- */
+
+    tournament.slots.textContent =
+      "REGISTRATION CLOSED";
+
+
+    tournament.button.textContent =
+      "COMING SOON";
+
+
+    tournament.button.removeAttribute(
+      "href"
+    );
+
+
+    tournament.button.classList.add(
+      "tournament-closed"
+    );
+
+  }
+
+
+  /* ---------------------------------------------------------
+     LOAD ALL TOURNAMENT STATUSES
+     --------------------------------------------------------- */
 
   fetch(statusAPI)
 
     .then(function(response) {
+
+      if (!response.ok) {
+        throw new Error("Status API request failed");
+      }
 
       return response.json();
 
@@ -1347,59 +1533,68 @@
     .then(function(data) {
 
       if (
-        data.success === true &&
-        data.tournamentId === "SUPER4" &&
-        data.status === "OPEN"
+        data.success !== true ||
+        !data.tournaments
       ) {
 
-        super4Slots.textContent =
-          "4 SLOTS • OPEN";
-
-        super4Button.textContent =
-          "REGISTER →";
-
-        super4Button.href =
-          "register.html?tournament=super4";
-
-        super4Button.classList.remove(
-          "tournament-closed"
-        );
-
-      } else {
-
-        super4Slots.textContent =
-          "REGISTRATION CLOSED";
-
-        super4Button.textContent =
-          "REGISTRATION CLOSED";
-
-        super4Button.removeAttribute(
-          "href"
-        );
-
-        super4Button.classList.add(
-          "tournament-closed"
-        );
+        throw new Error("Invalid status response");
 
       }
+
+
+      updateTournament(
+        "SUPER4",
+        data.tournaments.SUPER4 || {}
+      );
+
+
+      updateTournament(
+        "PRO4",
+        data.tournaments.PRO4 || {}
+      );
+
+
+      updateTournament(
+        "GRANDE8",
+        data.tournaments.GRANDE8 || {}
+      );
 
     })
 
     .catch(function() {
 
-      super4Slots.textContent =
-        "REGISTRATION CLOSED";
+      /* -------------------------------------------------------
+         FAIL SAFE
 
-      super4Button.textContent =
-        "REGISTRATION CLOSED";
+         If the API cannot be reached, registration stays
+         closed rather than accidentally allowing registration.
+         ------------------------------------------------------- */
 
-      super4Button.removeAttribute(
-        "href"
-      );
+      Object.keys(tournaments)
+        .forEach(function(tournamentId) {
 
-      super4Button.classList.add(
-        "tournament-closed"
-      );
+          const tournament =
+            tournaments[tournamentId];
+
+
+          tournament.slots.textContent =
+            "REGISTRATION CLOSED";
+
+
+          tournament.button.textContent =
+            "COMING SOON";
+
+
+          tournament.button.removeAttribute(
+            "href"
+          );
+
+
+          tournament.button.classList.add(
+            "tournament-closed"
+          );
+
+        });
 
     });
 
