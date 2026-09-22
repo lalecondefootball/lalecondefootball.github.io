@@ -465,6 +465,10 @@
 const tournaments = {
 
 
+  /* ---------------------------------------------------------
+     SUPER 4
+  --------------------------------------------------------- */
+
   super4: {
 
     id: "SUPER4",
@@ -482,6 +486,10 @@ const tournaments = {
   },
 
 
+  /* ---------------------------------------------------------
+     PRO 4
+  --------------------------------------------------------- */
+
   pro4: {
 
     id: "PRO4",
@@ -498,6 +506,10 @@ const tournaments = {
 
   },
 
+
+  /* ---------------------------------------------------------
+     LA GRANDE LEÇON
+  --------------------------------------------------------- */
 
   grande: {
 
@@ -883,96 +895,346 @@ document
   .getElementById("registrationForm")
   .addEventListener(
     "submit",
-    function() {
-
+    async function() {
 
       const submitButton =
         document.getElementById(
           "submitButton"
         );
 
+      const registrationForm =
+        document.getElementById(
+          "registrationForm"
+        );
+
+      const registrationStatus =
+        document.getElementById(
+          "registrationStatus"
+        );
+
+      const confirmation =
+        document.getElementById(
+          "confirmation"
+        );
+
+
+      /* -----------------------------------------------------
+         GET CURRENT SLOT COUNT BEFORE SUBMISSION
+      ----------------------------------------------------- */
+
+      let startingCount = null;
+
+      try {
+
+        const response =
+          await fetch(
+            statusAPI,
+            {
+              cache: "no-store"
+            }
+          );
+
+
+        const data =
+          await response.json();
+
+
+        if (
+          data.success &&
+          data.tournaments &&
+          data.tournaments[tournament.id]
+        ) {
+
+          startingCount =
+            Number(
+              data.tournaments[tournament.id]
+                .registeredCount || 0
+            );
+
+        }
+
+      } catch (error) {
+
+        console.error(
+          "Could not get starting registration count:",
+          error
+        );
+
+      }
+
+
+      /* -----------------------------------------------------
+         DISABLE SUBMIT BUTTON
+      ----------------------------------------------------- */
 
       submitButton.disabled =
         true;
-
 
       submitButton.textContent =
         "SUBMITTING...";
 
 
-      setTimeout(function() {
+      /* -----------------------------------------------------
+         WAIT FOR NORMAL FORM POST
+      ----------------------------------------------------- */
+
+      setTimeout(
+        async function checkSubmission() {
+
+          try {
+
+            const response =
+              await fetch(
+                statusAPI,
+                {
+                  cache: "no-store"
+                }
+              );
 
 
-        document
-          .getElementById(
-            "registrationForm"
-          )
-          .style.display =
-          "none";
+            if (!response.ok) {
+              throw new Error(
+                "Status check failed"
+              );
+            }
 
 
-        document
-          .getElementById(
-            "registrationStatus"
-          )
-          .style.display =
-          "none";
+            const data =
+              await response.json();
 
 
-        document
-          .getElementById(
-            "confirmation"
-          )
-          .innerHTML = `
+            if (
+              !data.success ||
+              !data.tournaments ||
+              !data.tournaments[tournament.id]
+            ) {
+              throw new Error(
+                "Tournament status unavailable"
+              );
+            }
 
-            <div class="payment-box">
 
-              <div class="eyebrow">
-                REGISTRATION RECEIVED
+            const latest =
+              data.tournaments[tournament.id];
+
+
+            const latestStatus =
+              String(
+                latest.status || ""
+              )
+                .trim()
+                .toUpperCase();
+
+
+            const latestCount =
+              Number(
+                latest.registeredCount || 0
+              );
+
+
+            const latestSlots =
+              Number(
+                latest.slots || 0
+              );
+
+
+
+            /* =================================================
+               REGISTRATION ACCEPTED
+            ================================================= */
+
+            if (
+              startingCount !== null &&
+              latestCount > startingCount
+            ) {
+
+              registrationForm.style.display =
+                "none";
+
+              registrationStatus.style.display =
+                "none";
+
+
+              confirmation.innerHTML = `
+
+                <div class="payment-box">
+
+                  <div class="eyebrow">
+                    REGISTRATION RECEIVED
+                  </div>
+
+                  <h2>
+                    SUBMITTED
+                  </h2>
+
+                  <p>
+                    Your registration has been
+                    submitted successfully.
+                  </p>
+
+                  <p>
+
+                    <strong>
+                      Tournament:
+                    </strong>
+
+                    ${tournament.name}
+
+                  </p>
+
+                  <p>
+
+                    <strong>
+                      Status:
+                    </strong>
+
+                    🟡 PENDING
+
+                  </p>
+
+                  <p class="payment-note">
+
+                    Your payment will be verified
+                    by the admin.
+
+                  </p>
+
+                </div>
+
+              `;
+
+              return;
+            }
+
+
+
+            /* =================================================
+               TOURNAMENT BECAME FULL
+            ================================================= */
+
+            if (
+              latestStatus === "FULL" ||
+              latestCount >= latestSlots
+            ) {
+
+              registrationForm.style.display =
+                "none";
+
+              registrationStatus.style.display =
+                "block";
+
+
+              registrationStatus.innerHTML = `
+
+                <div class="payment-box">
+
+                  <div class="eyebrow">
+                    REGISTRATION CLOSED
+                  </div>
+
+                  <h2>
+                    REGISTRATION FULL
+                  </h2>
+
+                  <p>
+                    The final slot was taken
+                    before your registration
+                    could be confirmed.
+                  </p>
+
+                  <p class="payment-note">
+                    ${latestCount} / ${latestSlots}
+                    SLOTS FILLED
+                  </p>
+
+                </div>
+
+              `;
+
+              return;
+            }
+
+
+
+            /* =================================================
+               COULD NOT CONFIRM
+            ================================================= */
+
+            submitButton.disabled =
+              false;
+
+            submitButton.textContent =
+              "TRY AGAIN →";
+
+
+            confirmation.innerHTML = `
+
+              <div class="payment-box">
+
+                <div class="eyebrow">
+                  REGISTRATION STATUS
+                </div>
+
+                <h2>
+                  COULD NOT CONFIRM
+                </h2>
+
+                <p>
+                  We couldn't confirm your
+                  registration yet.
+                </p>
+
+                <p class="payment-note">
+                  Please check your details
+                  and try submitting again.
+                </p>
+
               </div>
 
-              <h2>
-                SUBMITTED
-              </h2>
-
-              <p>
-                Your registration has been
-                submitted successfully.
-              </p>
-
-              <p>
-
-                <strong>
-                  Tournament:
-                </strong>
-
-                ${tournament.name}
-
-              </p>
-
-              <p>
-
-                <strong>
-                  Status:
-                </strong>
-
-                🟡 PENDING
-
-              </p>
-
-              <p class="payment-note">
-
-                Your payment will be verified
-                by the admin.
-
-              </p>
-
-            </div>
-
-          `;
+            `;
 
 
-      }, 800);
+          } catch (error) {
+
+            console.error(
+              "Registration confirmation error:",
+              error
+            );
+
+
+            submitButton.disabled =
+              false;
+
+            submitButton.textContent =
+              "TRY AGAIN →";
+
+
+            confirmation.innerHTML = `
+
+              <div class="payment-box">
+
+                <div class="eyebrow">
+                  REGISTRATION STATUS
+                </div>
+
+                <h2>
+                  PLEASE TRY AGAIN
+                </h2>
+
+                <p>
+                  We couldn't verify the
+                  registration right now.
+                </p>
+
+              </div>
+
+            `;
+
+          }
+
+        },
+        2000
+      );
 
     }
   );
