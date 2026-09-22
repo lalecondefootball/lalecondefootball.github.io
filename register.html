@@ -46,6 +46,27 @@
 
 
     /* =====================================
+       REGISTRATION STATUS
+    ===================================== */
+
+    .registration-status {
+      margin: 24px 0;
+    }
+
+    .registration-status .payment-box {
+      text-align: center;
+    }
+
+    .registration-status h2 {
+      margin-bottom: 10px;
+    }
+
+    .registration-status p {
+      margin-bottom: 8px;
+    }
+
+
+    /* =====================================
        MOBILE
     ===================================== */
 
@@ -148,19 +169,48 @@
 
 
   <!-- =====================================================
+       REGISTRATION STATUS
+  ===================================================== -->
+
+  <div
+    id="registrationStatus"
+    class="registration-status">
+
+    <div class="payment-box">
+
+      <div class="eyebrow">
+        CHECKING AVAILABILITY
+      </div>
+
+      <h2>
+        PLEASE WAIT...
+      </h2>
+
+      <p>
+        Checking tournament slots.
+      </p>
+
+    </div>
+
+  </div>
+
+
+
+  <!-- =====================================================
        REGISTRATION FORM
-       ===================================================== -->
+  ===================================================== -->
 
   <form
     id="registrationForm"
     action="https://script.google.com/macros/s/AKfycbzE7rmEd_QcRcaJDm68in11OYcj3K1YenQ5YlVRJ3YoDH95rTm3rTp4jmZQdN1fkPxS/exec"
     method="POST"
-    target="hiddenFrame">
+    target="hiddenFrame"
+    style="display:none;">
 
 
     <!-- =====================================================
          HIDDEN TOURNAMENT DATA
-         ===================================================== -->
+    ===================================================== -->
 
     <input
       type="hidden"
@@ -177,7 +227,7 @@
 
     <!-- =====================================================
          PLAYER NAME
-         ===================================================== -->
+    ===================================================== -->
 
     <label>
 
@@ -196,7 +246,7 @@
 
     <!-- =====================================================
          WHATSAPP
-         ===================================================== -->
+    ===================================================== -->
 
     <label>
 
@@ -215,7 +265,7 @@
 
     <!-- =====================================================
          EFOOTBALL UID
-         ===================================================== -->
+    ===================================================== -->
 
     <label>
 
@@ -234,7 +284,7 @@
 
     <!-- =====================================================
          IN GAME NAME
-         ===================================================== -->
+    ===================================================== -->
 
     <label>
 
@@ -252,7 +302,7 @@
 
     <!-- =====================================================
          EMAIL
-         ===================================================== -->
+    ===================================================== -->
 
     <label>
 
@@ -270,10 +320,9 @@
 
     <!-- =====================================================
          PAYMENT
-         ===================================================== -->
+    ===================================================== -->
 
     <div class="payment-box">
-
 
       <div class="eyebrow">
         ENTRY PAYMENT
@@ -345,7 +394,7 @@
 
     <!-- =====================================================
          SUBMIT
-         ===================================================== -->
+    ===================================================== -->
 
     <button
       type="submit"
@@ -363,7 +412,7 @@
 
   <!-- =====================================================
        HIDDEN IFRAME
-       ===================================================== -->
+  ===================================================== -->
 
   <iframe
     name="hiddenFrame"
@@ -374,7 +423,7 @@
 
   <!-- =====================================================
        CONFIRMATION
-       ===================================================== -->
+  ===================================================== -->
 
   <div
     id="confirmation"
@@ -416,10 +465,6 @@
 const tournaments = {
 
 
-  /* ---------------------------------------------------------
-     SUPER 4
-     --------------------------------------------------------- */
-
   super4: {
 
     id: "SUPER4",
@@ -436,10 +481,6 @@ const tournaments = {
 
   },
 
-
-  /* ---------------------------------------------------------
-     PRO 4
-     --------------------------------------------------------- */
 
   pro4: {
 
@@ -458,10 +499,6 @@ const tournaments = {
   },
 
 
-  /* ---------------------------------------------------------
-     LA GRANDE LEÇON
-     --------------------------------------------------------- */
-
   grande: {
 
     id: "GRANDE8",
@@ -479,6 +516,15 @@ const tournaments = {
   }
 
 };
+
+
+
+/* =========================================================
+   STATUS API
+   ========================================================= */
+
+const statusAPI =
+  "https://script.google.com/macros/s/AKfycbyb89ER_9KutJqoZTGe-Nj4_RSO0ednIy4APwCXxLODgHwgKmUkGWjQ7UFdAOsfYxMM/exec";
 
 
 
@@ -576,6 +622,244 @@ document
 
 
 /* =========================================================
+   CHECK TOURNAMENT STATUS
+   ========================================================= */
+
+async function checkTournamentStatus() {
+
+  const statusBox =
+    document.getElementById(
+      "registrationStatus"
+    );
+
+  const registrationForm =
+    document.getElementById(
+      "registrationForm"
+    );
+
+
+  try {
+
+    const response =
+      await fetch(
+        statusAPI,
+        {
+          cache: "no-store"
+        }
+      );
+
+
+    if (!response.ok) {
+      throw new Error(
+        "Status API request failed"
+      );
+    }
+
+
+    const data =
+      await response.json();
+
+
+    if (
+      !data.success ||
+      !data.tournaments ||
+      !data.tournaments[tournament.id]
+    ) {
+      throw new Error(
+        "Tournament status unavailable"
+      );
+    }
+
+
+    const tournamentStatus =
+      data.tournaments[tournament.id];
+
+
+    const status =
+      String(
+        tournamentStatus.status || ""
+      )
+        .trim()
+        .toUpperCase();
+
+
+    const registeredCount =
+      Number(
+        tournamentStatus.registeredCount || 0
+      );
+
+
+    const slots =
+      Number(
+        tournamentStatus.slots || 0
+      );
+
+
+
+    /* =====================================================
+       FULL
+    ===================================================== */
+
+    if (
+      status === "FULL" ||
+      registeredCount >= slots
+    ) {
+
+      registrationForm.style.display =
+        "none";
+
+
+      statusBox.innerHTML = `
+
+        <div class="payment-box">
+
+          <div class="eyebrow">
+            REGISTRATION CLOSED
+          </div>
+
+          <h2>
+            REGISTRATION FULL
+          </h2>
+
+          <p>
+            All ${slots} slots for
+            <strong>${tournament.name}</strong>
+            have been filled.
+          </p>
+
+          <p class="payment-note">
+            ${registeredCount} / ${slots} SLOTS FILLED
+          </p>
+
+        </div>
+
+      `;
+
+      return;
+    }
+
+
+
+    /* =====================================================
+       OPEN
+    ===================================================== */
+
+    if (
+      status === "OPEN" &&
+      registeredCount < slots
+    ) {
+
+      statusBox.innerHTML = `
+
+        <div class="payment-box">
+
+          <div class="eyebrow">
+            REGISTRATION OPEN
+          </div>
+
+          <h2>
+            ${slots - registeredCount}
+            SLOT${slots - registeredCount === 1 ? "" : "S"}
+            AVAILABLE
+          </h2>
+
+          <p>
+            ${registeredCount} / ${slots}
+            slots filled
+          </p>
+
+        </div>
+
+      `;
+
+
+      registrationForm.style.display =
+        "block";
+
+
+      return;
+    }
+
+
+
+    /* =====================================================
+       DRAFT / CLOSED
+    ===================================================== */
+
+    registrationForm.style.display =
+      "none";
+
+
+    statusBox.innerHTML = `
+
+      <div class="payment-box">
+
+        <div class="eyebrow">
+          REGISTRATION CLOSED
+        </div>
+
+        <h2>
+          COMING SOON
+        </h2>
+
+        <p>
+          Registration for
+          <strong>${tournament.name}</strong>
+          is not open yet.
+        </p>
+
+      </div>
+
+    `;
+
+
+  } catch (error) {
+
+
+    /* =====================================================
+       API ERROR
+       FAIL CLOSED
+    ===================================================== */
+
+    registrationForm.style.display =
+      "none";
+
+
+    statusBox.innerHTML = `
+
+      <div class="payment-box">
+
+        <div class="eyebrow">
+          AVAILABILITY CHECK
+        </div>
+
+        <h2>
+          PLEASE TRY AGAIN
+        </h2>
+
+        <p>
+          We couldn't verify tournament
+          availability right now.
+        </p>
+
+        <p class="payment-note">
+          Please return to the tournament
+          page and try again.
+        </p>
+
+      </div>
+
+    `;
+
+    console.error(error);
+
+  }
+
+}
+
+
+
+/* =========================================================
    COPY UPI
    ========================================================= */
 
@@ -602,10 +886,6 @@ document
     function() {
 
 
-      /* -----------------------------------------------------
-         SUBMIT BUTTON
-      ----------------------------------------------------- */
-
       const submitButton =
         document.getElementById(
           "submitButton"
@@ -620,18 +900,20 @@ document
         "SUBMITTING...";
 
 
-      /* -----------------------------------------------------
-         SHOW CONFIRMATION
-         The browser continues the normal form POST
-         to the Secure Registration API.
-      ----------------------------------------------------- */
-
       setTimeout(function() {
 
 
         document
           .getElementById(
             "registrationForm"
+          )
+          .style.display =
+          "none";
+
+
+        document
+          .getElementById(
+            "registrationStatus"
           )
           .style.display =
           "none";
@@ -694,6 +976,14 @@ document
 
     }
   );
+
+
+
+/* =========================================================
+   START STATUS CHECK
+   ========================================================= */
+
+checkTournamentStatus();
 
 
 </script>
