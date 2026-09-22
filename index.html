@@ -222,6 +222,17 @@
 
 
     /* =========================================================
+       CLOSED TOURNAMENT
+       ========================================================= */
+
+    .tournament-closed {
+      opacity: 0.65;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+
+    /* =========================================================
        MOBILE — SPECIAL HERO COMPOSITION
        ========================================================= */
 
@@ -589,15 +600,19 @@
 
       </div>
 
-      <div class="slots">
-        4 SLOTS • OPEN
+      <div
+        class="slots"
+        id="super4Slots"
+      >
+        CHECKING REGISTRATION...
       </div>
 
       <a
         href="register.html?tournament=super4"
         class="btn full"
+        id="super4Button"
       >
-        REGISTER →
+        CHECKING...
       </a>
 
     </article>
@@ -657,14 +672,15 @@
       </div>
 
       <div class="slots">
-        4 SLOTS • OPEN
+        REGISTRATION CLOSED
       </div>
 
       <a
-        href="register.html?tournament=pro4"
-        class="btn full"
+        href="#"
+        class="btn full tournament-closed"
+        onclick="return false;"
       >
-        REGISTER →
+        COMING SOON
       </a>
 
     </article>
@@ -738,14 +754,15 @@
       </div>
 
       <div class="slots">
-        8 SLOTS • OPEN
+        REGISTRATION CLOSED
       </div>
 
       <a
-        href="register.html?tournament=grande"
-        class="btn full"
+        href="#"
+        class="btn full tournament-closed"
+        onclick="return false;"
       >
-        REGISTER →
+        COMING SOON
       </a>
 
     </article>
@@ -1275,10 +1292,14 @@
 
 
 <!-- =========================================================
-     FAQ SCRIPT
+     FAQ + SUPER 4 STATUS
      ========================================================= -->
 
 <script>
+
+  /* ---------------------------------------------------------
+     FAQ
+     --------------------------------------------------------- */
 
   document
     .querySelectorAll(".faq-question")
@@ -1294,6 +1315,90 @@
           item.classList.toggle("active");
 
         }
+      );
+
+    });
+
+
+  /* ---------------------------------------------------------
+     SUPER 4 STATUS
+     --------------------------------------------------------- */
+
+  const statusAPI =
+    "https://script.google.com/macros/s/AKfycbyrgiZ35OuE2ijdaUqVTfosK0Iw8g4PI1Mbk2SaZIlKAN7FWLfpxUKiD0gg8VlixFXk/exec";
+
+
+  const super4Button =
+    document.getElementById("super4Button");
+
+
+  const super4Slots =
+    document.getElementById("super4Slots");
+
+
+  fetch(statusAPI)
+
+    .then(function(response) {
+
+      return response.json();
+
+    })
+
+    .then(function(data) {
+
+      if (
+        data.success === true &&
+        data.tournamentId === "SUPER4" &&
+        data.status === "OPEN"
+      ) {
+
+        super4Slots.textContent =
+          "4 SLOTS • OPEN";
+
+        super4Button.textContent =
+          "REGISTER →";
+
+        super4Button.href =
+          "register.html?tournament=super4";
+
+        super4Button.classList.remove(
+          "tournament-closed"
+        );
+
+      } else {
+
+        super4Slots.textContent =
+          "REGISTRATION CLOSED";
+
+        super4Button.textContent =
+          "REGISTRATION CLOSED";
+
+        super4Button.removeAttribute(
+          "href"
+        );
+
+        super4Button.classList.add(
+          "tournament-closed"
+        );
+
+      }
+
+    })
+
+    .catch(function() {
+
+      super4Slots.textContent =
+        "REGISTRATION CLOSED";
+
+      super4Button.textContent =
+        "REGISTRATION CLOSED";
+
+      super4Button.removeAttribute(
+        "href"
+      );
+
+      super4Button.classList.add(
+        "tournament-closed"
       );
 
     });
