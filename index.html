@@ -1437,6 +1437,7 @@
     if (
       status === "FULL" ||
       (
+        status === "OPEN" &&
         slotLimit > 0 &&
         registeredCount >= slotLimit
       )
