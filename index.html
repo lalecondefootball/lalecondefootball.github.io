@@ -116,6 +116,112 @@
 
 
     /* =========================================================
+       FAQ
+       ========================================================= */
+
+    .faq-list {
+      margin-top: 40px;
+      max-width: 900px;
+    }
+
+    .faq-item {
+      border-top: 1px solid rgba(255,255,255,0.12);
+      padding: 0;
+    }
+
+    .faq-item:last-child {
+      border-bottom: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .faq-question {
+      width: 100%;
+      padding: 22px 0;
+      border: 0;
+      background: transparent;
+      color: inherit;
+      text-align: left;
+      font: inherit;
+      font-weight: 700;
+      font-size: 17px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .faq-question span:last-child {
+      font-size: 24px;
+      font-weight: 400;
+      transition: transform 0.2s ease;
+    }
+
+    .faq-answer {
+      display: none;
+      padding: 0 35px 22px 0;
+      opacity: 0.75;
+      line-height: 1.7;
+    }
+
+    .faq-item.active .faq-answer {
+      display: block;
+    }
+
+    .faq-item.active .faq-question span:last-child {
+      transform: rotate(45deg);
+    }
+
+
+    /* =========================================================
+       CONTACT
+       ========================================================= */
+
+    .contact-box {
+      margin-top: 35px;
+      max-width: 650px;
+    }
+
+    .contact-details {
+      display: grid;
+      gap: 18px;
+      margin-top: 28px;
+    }
+
+    .contact-details a {
+      color: inherit;
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .contact-details a:hover {
+      text-decoration: underline;
+    }
+
+
+    /* =========================================================
+       FOOTER LINKS
+       ========================================================= */
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px 24px;
+      margin-top: 20px;
+    }
+
+    .footer-links a {
+      color: inherit;
+      text-decoration: none;
+      opacity: 0.75;
+      font-size: 14px;
+    }
+
+    .footer-links a:hover {
+      opacity: 1;
+    }
+
+
+    /* =========================================================
        MOBILE — SPECIAL HERO COMPOSITION
        ========================================================= */
 
@@ -194,8 +300,6 @@
 
       /* ---------------------------------------------------------
          FUTURE STARS — MOBILE
-         Full image remains visible.
-         No crop.
          --------------------------------------------------------- */
 
       .future-stars-section {
@@ -209,6 +313,10 @@
 
         object-fit: contain;
         object-position: center center;
+      }
+
+      .faq-question {
+        font-size: 16px;
       }
 
     }
@@ -437,8 +545,6 @@
         01 • 4 PLAYERS
       </div>
 
-      <!-- SUPER 4 IMAGE -->
-
       <img
         class="tournament-image"
         src="./super4.jpg"
@@ -506,8 +612,6 @@
         02 • 4 PLAYERS
       </div>
 
-      <!-- PRO 4 IMAGE -->
-
       <img
         class="tournament-image"
         src="./pro4.jpg"
@@ -574,8 +678,6 @@
       <div class="card-number">
         03 • 8 PLAYERS
       </div>
-
-      <!-- LA GRANDE LEÇON IMAGE -->
 
       <img
         class="tournament-image"
@@ -657,7 +759,6 @@
 
 <!-- =========================================================
      YAMAL • ENDRICK • HAALAND
-     FULL COMPOSITION
      ========================================================= -->
 
 <section class="future-stars-section">
@@ -826,7 +927,7 @@
         03
       </b>
 
-      Never share private tournament or WhatsApp links.
+      Follow the tournament admin's match instructions.
 
     </p>
 
@@ -837,10 +938,288 @@
         04
       </b>
 
-      Follow the tournament admin's match instructions.
+      Play fairly and follow the published tournament rules.
 
     </p>
 
+
+  </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     FAQ
+     ========================================================= -->
+
+<section
+  id="faq"
+  class="section dark"
+>
+
+  <div class="eyebrow">
+    GOT QUESTIONS?
+  </div>
+
+  <h2>
+    FAQ
+  </h2>
+
+  <div class="faq-list">
+
+
+    <div class="faq-item">
+
+      <button
+        type="button"
+        class="faq-question"
+      >
+
+        <span>
+          How do I register?
+        </span>
+
+        <span>
+          +
+        </span>
+
+      </button>
+
+      <div class="faq-answer">
+
+        Choose a tournament, enter your player details,
+        complete the required payment, and submit your registration.
+
+      </div>
+
+    </div>
+
+
+    <div class="faq-item">
+
+      <button
+        type="button"
+        class="faq-question"
+      >
+
+        <span>
+          How do I pay the entry fee?
+        </span>
+
+        <span>
+          +
+        </span>
+
+      </button>
+
+      <div class="faq-answer">
+
+        Payment instructions are shown during the registration process.
+
+      </div>
+
+    </div>
+
+
+    <div class="faq-item">
+
+      <button
+        type="button"
+        class="faq-question"
+      >
+
+        <span>
+          When is my slot confirmed?
+        </span>
+
+        <span>
+          +
+        </span>
+
+      </button>
+
+      <div class="faq-answer">
+
+        Your slot is confirmed after your payment and registration
+        have been verified by the LDF admin.
+
+      </div>
+
+    </div>
+
+
+    <div class="faq-item">
+
+      <button
+        type="button"
+        class="faq-question"
+      >
+
+        <span>
+          What happens after my registration is approved?
+        </span>
+
+        <span>
+          +
+        </span>
+
+      </button>
+
+      <div class="faq-answer">
+
+        Approved players receive the information needed
+        to participate in their tournament.
+
+      </div>
+
+    </div>
+
+
+    <div class="faq-item">
+
+      <button
+        type="button"
+        class="faq-question"
+      >
+
+        <span>
+          What do I need to participate?
+        </span>
+
+        <span>
+          +
+        </span>
+
+      </button>
+
+      <div class="faq-answer">
+
+        You need a valid eFootball account and the correct
+        eFootball UID submitted during registration.
+
+      </div>
+
+    </div>
+
+
+    <div class="faq-item">
+
+      <button
+        type="button"
+        class="faq-question"
+      >
+
+        <span>
+          Can I get a refund?
+        </span>
+
+        <span>
+          +
+        </span>
+
+      </button>
+
+      <div class="faq-answer">
+
+        Refunds and cancellations are handled according to
+        the LDF Refund & Cancellation Policy.
+
+      </div>
+
+    </div>
+
+
+    <div class="faq-item">
+
+      <button
+        type="button"
+        class="faq-question"
+      >
+
+        <span>
+          Are LDF tournaments skill-based?
+        </span>
+
+        <span>
+          +
+        </span>
+
+      </button>
+
+      <div class="faq-answer">
+
+        Yes. LDF tournaments are skill-based eFootball
+        competitions where results are determined by gameplay
+        performance under the published tournament rules.
+
+      </div>
+
+    </div>
+
+
+  </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     CONTACT
+     ========================================================= -->
+
+<section
+  id="contact"
+  class="section"
+>
+
+  <div class="contact-box">
+
+    <div class="eyebrow">
+      NEED HELP?
+    </div>
+
+    <h2>
+      CONTACT US
+    </h2>
+
+    <p>
+      Have a question about registration, payment,
+      or a tournament? Get in touch with La Leçon de Football.
+    </p>
+
+    <div class="contact-details">
+
+      <div>
+
+        <small>
+          EMAIL
+        </small>
+
+        <br>
+
+        <a href="mailto:lalecondefootball@gmail.com">
+          lalecondefootball@gmail.com
+        </a>
+
+      </div>
+
+
+      <div>
+
+        <small>
+          PHONE / WHATSAPP
+        </small>
+
+        <br>
+
+        <a href="tel:+917034870640">
+          +91 70348 70640
+        </a>
+
+      </div>
+
+    </div>
 
   </div>
 
@@ -865,11 +1244,61 @@
     Teach a masterclass... or get exposed.
   </span>
 
+
+  <div class="footer-links">
+
+    <a href="contact.html">
+      Contact Us
+    </a>
+
+    <a href="terms.html">
+      Terms & Conditions
+    </a>
+
+    <a href="privacy.html">
+      Privacy Policy
+    </a>
+
+    <a href="refund.html">
+      Refund & Cancellation
+    </a>
+
+  </div>
+
+
   <span>
     © 2026
   </span>
 
 </footer>
+
+
+
+<!-- =========================================================
+     FAQ SCRIPT
+     ========================================================= -->
+
+<script>
+
+  document
+    .querySelectorAll(".faq-question")
+    .forEach(function(button) {
+
+      button.addEventListener(
+        "click",
+        function() {
+
+          const item =
+            button.closest(".faq-item");
+
+          item.classList.toggle("active");
+
+        }
+      );
+
+    });
+
+</script>
 
 
 </body>
